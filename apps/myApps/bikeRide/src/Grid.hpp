@@ -10,7 +10,7 @@ public:
     void draw();
     void drawThickLine(ofVec2f rate1, ofVec2f rate2);
     void setSpeed(float s);
-    void setCenter(ofVec2f* c);
+    void setCenter(ofVec2f* c, int inc);
     float fRand(float fMin, float fMax);
     
     ofVec2f center;

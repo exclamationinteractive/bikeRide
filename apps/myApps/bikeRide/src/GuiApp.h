@@ -28,7 +28,9 @@ public:
     ofxIntSlider tronCount;
     ofxIntSlider tronLineThickness;
     
+    ofxToggle gridOn;
     ofxIntSlider gridSpeed;
+    ofxFloatSlider gridIterations;
     
     
 

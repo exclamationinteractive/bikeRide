@@ -101,7 +101,7 @@ void ofApp::update(){
     
     // GRID
     grid->setSpeed(gui->gridSpeed);
-    grid->setCenter(new ofVec2f(ofGetMouseX(), ofGetMouseY()));
+    grid->setCenter(new ofVec2f(ofGetMouseX(), ofGetMouseY()), gui->gridIterations);
     grid->update();
 
 }
@@ -175,7 +175,10 @@ void ofApp::draw(){
     }
     
     // GRID
-    grid->draw();
+    if (gui->gridOn)
+    {
+        grid->draw();
+    }
 
     fbo.end();
     

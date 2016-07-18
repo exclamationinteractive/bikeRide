@@ -29,16 +29,6 @@ Grid::Grid(int ms, int inc)
         
         lines.push_back(l);
     }
-//
-//    for (int i=1; i<=1; i++)
-//    {
-//        lines.push_back(new WobblingCircle(5,1, 1,1));
-//    }
-//
-//    l3Rate.set(ofGetWindowWidth() - center.x, ofGetWindowHeight() - center.y);
-//    l4Rate.set(ofGetWindowWidth() - center.x, 0 - center.y);
-    
-    
 }
 
 //--------------------------------------------------------------
@@ -54,20 +44,6 @@ void Grid::draw(){
     
     float xRate = 1;
     float yRate = 1;
-
-    ofVec2f p1;
-    p1.set(center + ofWrap(t, 0, 1) * *lines.at(0).at(1));
-    ofVec2f p2;
-    p2.set(center + ofWrap(t, 0, 1) * *lines.at(1).at(1));
-    ofVec2f p3;
-    p3.set(center + ofWrap(t + 1.0/increment * 1, 0, 1) * *lines.at(0).at(1));
-    ofVec2f p4;
-    p4.set(center + ofWrap(t + 1.0/increment * 1, 0, 1) * *lines.at(1).at(1));
-
-    ofDrawLine(p1,p2);
-    ofDrawLine(p2,p4);
-    ofDrawLine(p4,p3);
-    ofDrawLine(p3,p1);
 
     for(int i = 0; i < increment-1; i ++)
     {
@@ -142,8 +118,10 @@ void Grid::setSpeed(float s)
     speed = s/1000.0;
 }
 
-void Grid::setCenter(ofVec2f* c)
+void Grid::setCenter(ofVec2f* c, int inc)
 {
+    increment = inc;
+
     center = *c;
     
     lines.clear();
@@ -154,7 +132,7 @@ void Grid::setCenter(ofVec2f* c)
     for (int i = 0; i <= increment + 1; i ++)
     {
         std::array<ofVec2f*, 4> l = {new ofVec2f(xRes * i - center.x, 0 - center.y), new ofVec2f(xRes * i - center.x, ofGetWindowHeight() - center.y), new ofVec2f(0 - center.x, yRes * i - center.y), new ofVec2f(ofGetWindowWidth() - center.x, yRes * i - center.y)};
-        
+
         lines.push_back(l);
     }
 

@@ -32,7 +32,9 @@ void GuiApp::setup(){
     gui.add(tronLineThickness.setup("tron width",1,0,1000));
     gui.add(tronMaxSpeed.setup("tron max speed",10,1,30));
 
+    gui.add(gridOn.setup("grid on", false));
     gui.add(gridSpeed.setup("grid speed",10,1,30));
+    gui.add(gridIterations.setup("grid iteration",10,1,30));
 }
 
 //--------------------------------------------------------------
