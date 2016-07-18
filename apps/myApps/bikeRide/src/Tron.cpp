@@ -37,7 +37,7 @@ void Tron::drawThickLine(ofVec2f rate1, ofVec2f rate2)
     ofFill();
 
     ofPolyline line;
-    
+
     ofVec2f p1;
     p1.set(center + t * rate1);
     ofVec2f p2;
@@ -53,13 +53,14 @@ void Tron::drawThickLine(ofVec2f rate1, ofVec2f rate2)
     ofVertex(p3.x, p3.y);
     ofVertex(p4.x, p4.y);
     ofEndShape();
-//
+
 //    line.addVertex(p1);
 //    line.addVertex(p2);
 //    line.addVertex(p3);
 //    line.addVertex(p4);
 //    line.close(); // close the shape
 //    line.draw();
+
 }
 //--------------------------------------------------------------
 void Tron::draw(){

@@ -4,6 +4,7 @@
 #include "guiApp.h"
 #include "WobblingCircle.hpp"
 #include "Tron.hpp"
+#include "Grid.hpp"
 
 class ofApp : public ofBaseApp{
 	public:
@@ -25,18 +26,7 @@ class ofApp : public ofBaseApp{
     void drawLines(int lineCount);
     void drawCircles(int circleCount);
 
-    ofShader shaderBlurX;
-    ofShader shaderBlurY;
-
-    ofFbo fboBlurOnePass;
-    ofFbo fboBlurTwoPass;
-    
-    ofImage image;
-    
-    ofVideoPlayer videoPlayer;
-   
-//    int* countGuiIntPointer;
-//    int* fadeGuiIntPointer;
+    Grid* grid;
 
 //    GuiApp* gui;
     std::shared_ptr<GuiApp> gui;

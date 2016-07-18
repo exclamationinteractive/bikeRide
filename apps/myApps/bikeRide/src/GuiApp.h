@@ -13,7 +13,7 @@ public:
 
     ofxPanel gui;
 
-    ofxIntSlider fade;
+    ofxFloatSlider fade;
 
     ofxIntSlider wandCircMaxSpeed;
     ofxIntSlider wandCircMaxAccel;
@@ -27,5 +27,9 @@ public:
     ofxIntSlider tronMaxSpeed;
     ofxIntSlider tronCount;
     ofxIntSlider tronLineThickness;
+    
+    ofxIntSlider gridSpeed;
+    
+    
 
 };

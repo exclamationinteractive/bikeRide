@@ -26,11 +26,15 @@ void ofApp::setup(){
     {
         trons.push_back(new Tron(5, 5));
     }
+    
+    // GRID
+    grid = new Grid(1,5);
+
+
 }
 
 //--------------------------------------------------------------
 void ofApp::update(){
-    videoPlayer.update();
     
     // WANDERING CIRCLES
     for (std::vector<WobblingCircle*>::iterator it = wanderingCircles.begin() ; it != wanderingCircles.end(); ++it)
@@ -93,6 +97,13 @@ void ofApp::update(){
             ++itTrons;
         }
     }
+    
+    
+    // GRID
+    grid->setSpeed(gui->gridSpeed);
+    grid->setCenter(new ofVec2f(ofGetMouseX(), ofGetMouseY()));
+    grid->update();
+
 }
 
 void ofApp::drawLines(int lineCount)
@@ -141,7 +152,8 @@ void ofApp::draw(){
     fbo.begin();
 
     // FADE
-    ofSetColor(0,0,0,gui->fade);
+    float fade = gui->fade;
+    ofSetColor(0,0,0,255*(pow(fade,3)));
     ofDrawRectangle(0,0,fbo.getWidth(), fbo.getHeight());
 
 //    drawLines(*countGuiIntPointer);
@@ -161,6 +173,9 @@ void ofApp::draw(){
     {
         (*it)->draw();
     }
+    
+    // GRID
+    grid->draw();
 
     fbo.end();
     
