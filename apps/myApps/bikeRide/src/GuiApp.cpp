@@ -24,7 +24,7 @@ void GuiApp::setup(){
     gui.add(wandCircMaxSpeed.setup("maxSpeed",10,1,100));
     gui.add(wandCircMaxAccel.setup("maxAccel",10,1,100));
     gui.add(wandCircAccelFreq.setup("accelFreq",10,1,100));
-    gui.add(wandCircGravityStrength.setup("gravStrenth",10,1,30000));
+    gui.add(wandCircGravityStrength.setup("gravStrenth",10,1,3000));
     gui.add(wandCircGravityAttractiveScale.setup("GravScale",1,-1,1));
     gui.add(wandCircGravityAttractivePower.setup("GravPow",1,0,5));
 
