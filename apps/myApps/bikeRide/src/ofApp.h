@@ -2,7 +2,7 @@
 
 #include "ofMain.h"
 #include "guiApp.h"
-#include "WobblingCircle.hpp"
+#include "WobblingCircles.hpp"
 #include "Tron.hpp"
 #include "Grid.hpp"
 
@@ -25,7 +25,7 @@ class ofApp : public ofBaseApp{
 	void gotMessage(ofMessage msg);
     void drawLines(int lineCount);
     void drawCircles(int circleCount);
-
+    
     Grid* grid;
 
 //    GuiApp* gui;
@@ -36,7 +36,7 @@ class ofApp : public ofBaseApp{
     ofFbo fbo; // with alpha
 
 
-    std::vector<WobblingCircle*> wanderingCircles;
+    std::vector<WobblingCircles*> wanderingCircles;
     std::vector<Tron*> trons;
 
 };

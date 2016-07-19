@@ -19,6 +19,7 @@ void GuiApp::setup(){
     gui.add(fade.setup("fade",0.5,0,1));
 
 
+    gui.add(wandCircFade.setup("circFade",1,0,1));
     gui.add(wandCircRadius.setup("radius",1,0,100));
     gui.add(wandCircCount.setup("count",100,0,100));
     gui.add(wandCircMaxSpeed.setup("maxSpeed",10,1,100));
@@ -33,6 +34,7 @@ void GuiApp::setup(){
     gui.add(tronMaxSpeed.setup("tron max speed",10,1,30));
 
     gui.add(gridOn.setup("grid on", false));
+    gui.add(gridFade.setup("grid fade", 1,0,1));
     gui.add(gridSpeed.setup("grid speed",10,1,30));
     gui.add(gridIterations.setup("grid iteration",10,1,30));
 }

@@ -7,12 +7,16 @@ public:
     Grid(int ms, int lt);
     
     void update();
-    void draw();
+    void draw(float f);
     void drawThickLine(ofVec2f rate1, ofVec2f rate2);
     void setSpeed(float s);
     void setCenter(ofVec2f* c, int inc);
     float fRand(float fMin, float fMax);
-    
+    void windowResized(int w, int h);
+
+
+    ofFbo fbo; // with alpha
+
     ofVec2f center;
     
     float increment;
@@ -21,4 +25,5 @@ public:
 
     std::vector<std::array<ofVec2f*, 4>> lines;
 
+    
 };

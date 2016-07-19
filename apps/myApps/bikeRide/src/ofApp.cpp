@@ -6,11 +6,13 @@ ofApp::ofApp(std::shared_ptr<GuiApp> g){
 
 //--------------------------------------------------------------
 void ofApp::setup(){
-    fbo.allocate(ofGetWindowWidth(), ofGetWindowHeight(), GL_RGBA32F_ARB); // with alpha, 8 bits red, 8 bits green, 8 bits blue, 8 bits alpha, from 0 to 255 in 256 steps
 
     ofBackground(0,0,0);
+    ofSetFrameRate(120);
 
     // FADE
+    fbo.allocate(ofGetWindowWidth(), ofGetWindowHeight(), GL_RGBA32F_ARB); // with alpha, 8 bits red, 8 bits green, 8 bits blue, 8 bits alpha, from 0 to 255 in 256 steps
+
     fbo.begin();
     ofClear(255,255,255, 0);
     fbo.end();
@@ -18,7 +20,7 @@ void ofApp::setup(){
     // WANDERING CIRCLES
     for (int i=1; i<=1; i++)
     {
-        wanderingCircles.push_back(new WobblingCircle(5,1, 1,1));
+        wanderingCircles.push_back(new WobblingCircles());
     }
     
     // TRON
@@ -37,43 +39,11 @@ void ofApp::setup(){
 void ofApp::update(){
     
     // WANDERING CIRCLES
-    for (std::vector<WobblingCircle*>::iterator it = wanderingCircles.begin() ; it != wanderingCircles.end(); ++it)
+    for (std::vector<WobblingCircles*>::iterator it = wanderingCircles.begin() ; it != wanderingCircles.end(); ++it)
     {
-        (*it)->update();
+        (*it)->update(gui->wandCircCount, gui->wandCircMaxSpeed, gui->wandCircRadius, gui->wandCircMaxAccel, gui->wandCircAccelFreq, gui->wandCircGravityStrength, gui->wandCircGravityAttractiveScale, gui->wandCircGravityAttractivePower);
     }
     
-    if (rand() % (100) > gui->wandCircCount)
-    {
-        wanderingCircles.push_back(new WobblingCircle(gui->wandCircRadius,gui->wandCircMaxSpeed, gui->wandCircMaxAccel, gui->wandCircAccelFreq));
-        wanderingCircles.push_back(new WobblingCircle(gui->wandCircRadius,gui->wandCircMaxSpeed, gui->wandCircMaxAccel, gui->wandCircAccelFreq));
-        wanderingCircles.push_back(new WobblingCircle(gui->wandCircRadius,gui->wandCircMaxSpeed, gui->wandCircMaxAccel, gui->wandCircAccelFreq));
-        wanderingCircles.push_back(new WobblingCircle(gui->wandCircRadius,gui->wandCircMaxSpeed, gui->wandCircMaxAccel, gui->wandCircAccelFreq));
-        wanderingCircles.push_back(new WobblingCircle(gui->wandCircRadius,gui->wandCircMaxSpeed, gui->wandCircMaxAccel, gui->wandCircAccelFreq));
-        wanderingCircles.push_back(new WobblingCircle(gui->wandCircRadius,gui->wandCircMaxSpeed, gui->wandCircMaxAccel, gui->wandCircAccelFreq));
-        wanderingCircles.push_back(new WobblingCircle(gui->wandCircRadius,gui->wandCircMaxSpeed, gui->wandCircMaxAccel, gui->wandCircAccelFreq));
-        wanderingCircles.push_back(new WobblingCircle(gui->wandCircRadius,gui->wandCircMaxSpeed, gui->wandCircMaxAccel, gui->wandCircAccelFreq));
-        wanderingCircles.push_back(new WobblingCircle(gui->wandCircRadius,gui->wandCircMaxSpeed, gui->wandCircMaxAccel, gui->wandCircAccelFreq));
-    }
-    
-    std::vector<WobblingCircle*>::iterator it2 = wanderingCircles.begin();
-    while (it2 != wanderingCircles.end()) {
-        
-        void setGravityStrength(int strength, int attractiveScale, int power);
-        (*it2)->setGravityStrength(gui->wandCircGravityStrength, gui->wandCircGravityAttractiveScale, gui->wandCircGravityAttractivePower);
-
-        (*it2)->setMaxSpeed(gui->wandCircMaxSpeed, gui->wandCircMaxAccel, gui->wandCircAccelFreq);
-
-        if ((*it2)->shouldDelete())
-        {
-            delete((*it2));
-            it2 = wanderingCircles.erase(it2);
-        }
-        else
-        {
-            ++it2;
-        }
-    }
-
     // TRON
     for (std::vector<Tron*>::iterator it = trons.begin() ; it != trons.end(); ++it)
     {
@@ -148,6 +118,7 @@ void ofApp::drawCircles(int circleCount)
 
 //--------------------------------------------------------------
 void ofApp::draw(){
+
     
     fbo.begin();
 
@@ -160,13 +131,6 @@ void ofApp::draw(){
 //    drawCircles(*countGuiIntPointer);
 
     
-    // DRAW WANDERING CIRCLES
-    ofSetColor(255,255,255);
-    for (std::vector<WobblingCircle*>::iterator it = wanderingCircles.begin() ; it != wanderingCircles.end(); ++it)
-    {
-        (*it)->draw();
-    }
-    
     // DRAW TRONS
     ofSetColor(255,255,255);
     for (std::vector<Tron*>::iterator it = trons.begin() ; it != trons.end(); ++it)
@@ -174,16 +138,25 @@ void ofApp::draw(){
         (*it)->draw();
     }
     
-    // GRID
-    if (gui->gridOn)
-    {
-        grid->draw();
-    }
-
     fbo.end();
     
     fbo.draw(0,0);
     
+
+    // DRAW WANDERING CIRCLES
+    for (std::vector<WobblingCircles*>::iterator it = wanderingCircles.begin() ; it != wanderingCircles.end(); ++it)
+    {
+        (*it)->draw(gui->wandCircFade);
+    }
+    
+    // GRID
+    if (gui->gridOn)
+    {
+        grid->draw(gui->gridFade);
+    }
+
+
+
     ofSetColor(255,0,0);
     ofDrawBitmapString(ofGetFrameRate(), 100, 100);
     ofSetColor(255,255,255);
@@ -228,6 +201,14 @@ void ofApp::mouseReleased(int x, int y, int button){
 //--------------------------------------------------------------
 void ofApp::windowResized(int w, int h){
     fbo.allocate(ofGetWindowWidth(), ofGetWindowHeight(), GL_RGBA32F_ARB); // with alpha, 8 bits red, 8 bits green, 8 bits blue, 8 bits alpha, from 0 to 255 in 256 steps
+
+    // WANDERING CIRCLES
+    for (std::vector<WobblingCircles*>::iterator it = wanderingCircles.begin() ; it != wanderingCircles.end(); ++it)
+    {
+        (*it)->windowResized(w, h);
+    }
+
+    grid->windowResized(w, h);
 }
 
 //--------------------------------------------------------------

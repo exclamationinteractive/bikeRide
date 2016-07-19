@@ -15,6 +15,7 @@ public:
 
     ofxFloatSlider fade;
 
+    ofxFloatSlider wandCircFade;
     ofxIntSlider wandCircMaxSpeed;
     ofxIntSlider wandCircMaxAccel;
     ofxIntSlider wandCircAccelFreq;
@@ -29,6 +30,7 @@ public:
     ofxIntSlider tronLineThickness;
     
     ofxToggle gridOn;
+    ofxFloatSlider gridFade;
     ofxIntSlider gridSpeed;
     ofxFloatSlider gridIterations;
     

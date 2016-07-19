@@ -10,6 +10,15 @@
 
 Grid::Grid(int ms, int inc)
 {
+
+    // FADE
+    fbo.allocate(ofGetWindowWidth(), ofGetWindowHeight(), GL_RGBA32F_ARB); // with alpha, 8 bits red, 8 bits green, 8 bits blue, 8 bits alpha, from 0 to 255 in 256 steps
+    
+    fbo.begin();
+    ofClear(255,255,255, 0);
+    fbo.end();
+
+    
     int buffer = 100;
     
     speed = ms/1000.0;
@@ -37,7 +46,15 @@ void Grid::update(){
 }
 
 //--------------------------------------------------------------
-void Grid::draw(){
+void Grid::draw(float f){
+    // FADE
+    fbo.begin();
+    float fade = f;
+    ofSetColor(0,0,0,255*(pow(fade,3)));
+    ofDrawRectangle(0,0,fbo.getWidth(), fbo.getHeight());
+    
+    ofSetColor(255,255,255,255);
+
     float x = 0;
     float y = 0;
     float z = 0;
@@ -68,49 +85,9 @@ void Grid::draw(){
         }
     }
     
-    //    ofSetLinethickness(lineThickness);
-//    for(int i = 0; i < increment; i ++)
-//    {
-//        for (std::vector<std::array<ofVec2f*, 4>>::iterator it = lines.begin() ; it != lines.end(); ++it)
-//        {
-////            // HORIZONTAL
-//            ofVec2f p1;
-//            p1.set(center + ofWrap(t + 1.0/increment * i, 0, 1) * *it->at(0));
-//            ofVec2f p2;
-//            p2.set(center + ofWrap(t + 1.0/increment * i, 0, 1) * *it->at(1));
-//            ofVec2f p3;
-//            p3.set(center + ofWrap(t + 1.0/increment * i, 0, 1) * *it->at(2));
-//            ofVec2f p4;
-//            p4.set(center + ofWrap(t + 1.0/increment * i, 0, 1) * *it->at(3));
-//            
-//            ofDrawCircle(p1,3);
-//            ofDrawCircle(p2,3);
-//            ofDrawCircle(p3,3);
-//            ofDrawCircle(p4,3);
-//
-////            ofDrawLine(p1, p2);
-////            ofDrawLine(p2, p3);
-//            ofDrawLine(p3, p4);
-////            ofDrawLine(p4, p1);
-////            
-////            // VERTICAL
-//            ofVec2f v1;
-//            v1.set(center + ofClamp(t + 1.0/increment * (i - 1), 0, 1) * *it->at(0));
-//            ofVec2f v2;
-//            v2.set(center + ofClamp(t + 1.0/increment * (i - 1), 0, 1) * *it->at(1));
-//            ofDrawLine(v1, v2);
-//            ofVec2f v3;
-//            v3.set(center + ofClamp(t + 1.0/increment * (i - 1), 0, 1) * *it->at(2));
-//            ofVec2f v4;
-//            v4.set(center + ofClamp(t + 1.0/increment *(i - 1), 0, 1) * *it->at(3));
-////
-////            ofDrawLine(p1, v1);
-////            ofDrawLine(p2, v2);
-////            ofDrawLine(p3, v3);
-////            ofDrawLine(p4, v4);
-//
-//        }
-//    }
+    fbo.end();
+    fbo.draw(0,0);
+
 }
 
 void Grid::setSpeed(float s)
@@ -142,4 +119,10 @@ float Grid::fRand(float fMin, float fMax)
 {
     float f = (float)rand() / RAND_MAX;
     return fMin + f * (fMax - fMin);
+}
+
+
+//--------------------------------------------------------------
+void Grid::windowResized(int w, int h){
+    fbo.allocate(ofGetWindowWidth(), ofGetWindowHeight(), GL_RGBA32F_ARB); // with alpha, 8 bits red, 8 bits green, 8 bits blue, 8 bits alpha, from 0 to 255 in 256 steps
 }
