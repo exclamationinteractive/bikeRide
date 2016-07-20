@@ -4,14 +4,17 @@
 
 class Tron : public ofBaseApp{
 public:
-    Tron(int ms, int lt);
+    Tron(int ms, int lt, float centerOffset);
     
     void update();
-    void draw();
-    void drawThickLine(ofVec2f rate1, ofVec2f rate2);
+    void draw(float lowerT);
+    void drawThickLine(ofVec2f rate1, ofVec2f rate2, float lowerT);
     bool shouldDelete();
     float fRand(float fMin, float fMax);
-    
+
+    //FADE
+    ofFbo fbo;
+
     ofVec2f center;
     ofVec2f l1Rate;
     ofVec2f l2Rate;
@@ -27,8 +30,6 @@ public:
 
     float maxSpeed;
     float t;
-    
+
     std::vector<ofVec3f*> gravityCenters;
-    
-    
 };

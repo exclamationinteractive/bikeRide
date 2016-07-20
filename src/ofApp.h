@@ -3,7 +3,7 @@
 #include "ofMain.h"
 #include "guiApp.h"
 #include "WobblingCircles.hpp"
-#include "Tron.hpp"
+#include "Trons.hpp"
 #include "Grid.hpp"
 
 class ofApp : public ofBaseApp{
@@ -35,8 +35,11 @@ class ofApp : public ofBaseApp{
     int fadeAmnt;
     ofFbo fbo; // with alpha
 
+    // SERIAL
+    ofSerial	serial;
+    float speed;
 
     std::vector<WobblingCircles*> wanderingCircles;
-    std::vector<Tron*> trons;
+    std::vector<Trons*> trons;
 
 };

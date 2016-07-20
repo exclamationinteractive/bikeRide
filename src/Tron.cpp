@@ -8,17 +8,25 @@
 
 #include "Tron.hpp"
 
-Tron::Tron(int ms, int lt)
+Tron::Tron(int ms, int lt, float centerOffset)
 {
     int buffer = 100;
 
+    // FADE
+    fbo.allocate(ofGetWindowWidth(), ofGetWindowHeight(), GL_RGBA32F_ARB); // with alpha, 8 bits red, 8 bits green, 8 bits blue, 8 bits alpha, from 0 to 255 in 256 steps
+    fbo.begin();
+    ofClear(255,255,255, 0);
+    fbo.end();
+
+
     maxSpeed = ms/1000.0;
     t = 0;
-    
+
     lineThickness = lt;
-    
-    center.set(ofGetMouseX(), ofGetMouseY());
+
+//    center.set(ofGetMouseX(), ofGetMouseY());
 //    center.set(ofGetWindowWidth()/2.0, ofGetWindowHeight()/2.0);
+    center.set(ofGetWindowWidth()/2.0 + centerOffset, ofGetWindowHeight()/2.0 );
     l1Rate.set(0 - center.x, 0 - center.y);
     l2Rate.set(0 - center.x, ofGetWindowHeight() - center.y);
     l3Rate.set(ofGetWindowWidth() - center.x, ofGetWindowHeight() - center.y);
@@ -32,20 +40,20 @@ void Tron::update(){
     t = t + maxSpeed * ofGetLastFrameTime()*100;
 }
 
-void Tron::drawThickLine(ofVec2f rate1, ofVec2f rate2)
+void Tron::drawThickLine(ofVec2f rate1, ofVec2f rate2, float lowerT)
 {
     ofFill();
 
     ofPolyline line;
 
     ofVec2f p1;
-    p1.set(center + t * rate1);
+    p1.set(center + (t + lowerT) * rate1);
     ofVec2f p2;
-    p2.set(center + (t+lineThickness/1000.0) * rate1);
+    p2.set(center + (t+lowerT+lineThickness/1000.0) * rate1);
     ofVec2f p3;
-    p3.set(center + (t+lineThickness/1000.0) * rate2);
+    p3.set(center + (t+lowerT+lineThickness/1000.0) * rate2);
     ofVec2f p4;
-    p4.set(center + t * rate2);
+    p4.set(center + (t + lowerT) * rate2);
 
     ofBeginShape();
     ofVertex(p1.x, p1.y);
@@ -63,7 +71,7 @@ void Tron::drawThickLine(ofVec2f rate1, ofVec2f rate2)
 
 }
 //--------------------------------------------------------------
-void Tron::draw(){
+void Tron::draw(float lowerT){
     float x = 0;
     float y = 0;
     float z = 0;
@@ -73,35 +81,44 @@ void Tron::draw(){
 
 //    ofSetLinethickness(lineThickness);
     ofVec2f p1;
-    p1.set(center + t * l1Rate);
+    p1.set(center + (t + lowerT) * l1Rate);
     ofVec2f p2;
-    p2.set(center + t * l2Rate);
+    p2.set(center + (t + lowerT) * l2Rate);
     ofVec2f p3;
-    p3.set(center + t * l3Rate);
+    p3.set(center + (t + lowerT) * l3Rate);
     ofVec2f p4;
-    p4.set(center + t * l4Rate);
+    p4.set(center + (t + lowerT) * l4Rate);
+    
+    ofSetColor(0,0,0);
+    ofDrawRectangle(0,0,ofGetWindowWidth(),p1.y);
+    ofDrawRectangle(0,0,p1.x,ofGetWindowHeight());
+    ofDrawRectangle(0,p3.y,ofGetWindowWidth(),ofGetWindowHeight());
+    ofDrawRectangle(p3.x,0,ofGetWindowWidth(),ofGetWindowHeight());
+
+    ofSetColor(255,255,255);
+
 
 //    ofSetLineWidth(lineThickness);
-    
+
     // left
-    if (rand() % (100) > 50)
+    if (rand() % (100) > 30)
     {
-        drawThickLine(l1Rate, l2Rate);
+        drawThickLine(l1Rate, l2Rate, lowerT);
     }
     // bottom
     if (rand() % (100) > 0)
     {
-        drawThickLine(l2Rate, l3Rate);
+        drawThickLine(l2Rate, l3Rate, lowerT);
     }
     // right
-    if (rand() % (100) > 50)
+    if (rand() % (100) > 30)
     {
-        drawThickLine(l3Rate, l4Rate);
+        drawThickLine(l3Rate, l4Rate,lowerT);
     }
     // top
-    if (rand() % (100) > 90)
+    if (rand() % (100) > 50)
     {
-        drawThickLine(l4Rate, l1Rate);
+        drawThickLine(l4Rate, l1Rate,lowerT);
     }
 //    ofDrawLine(p1, p2);
 //    ofDrawLine(p2, p3);
@@ -111,7 +128,7 @@ void Tron::draw(){
 
 bool Tron::shouldDelete()
 {
-    if (t > ofGetWindowWidth())
+    if (t > 1.5)
     {
         return true;
     }

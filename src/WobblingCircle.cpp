@@ -53,9 +53,9 @@ void WobblingCircle::update(){
         it->center = *new ofVec2f(ofGetMouseX(), ofGetMouseY());
         float gravDist = it->center.distance(pos);
 
-        if (gravDist > 200){
+//        if (gravDist > 200){
             vel = vel + it->attractiveScale * ((pos-it->center).normalize() * it->strength / pow(gravDist,it->power)) * ofGetLastFrameTime() * 100;
-        }
+//        }
 //        if (gravDist < 300)
 //        {
 //            vel = vel + 0.01*((pos-it->center).normalize() * it->strength / (gravDist));

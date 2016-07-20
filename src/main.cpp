@@ -29,7 +29,7 @@ int main( ){
 
     
     settings.width = 300;
-    settings.height = 300;
+    settings.height = 600;
     settings.setPosition(ofVec2f(0,0));
     auto guiWindow = ofCreateWindow(settings);
 

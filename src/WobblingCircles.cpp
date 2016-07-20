@@ -73,7 +73,10 @@ void WobblingCircles::draw(float f){
         (*it)->draw();
     }
     fbo.end();
+
+    ofEnableBlendMode(OF_BLENDMODE_ADD);
     fbo.draw(0,0);
+    ofEnableBlendMode(OF_BLENDMODE_ALPHA);
 }
 
 //--------------------------------------------------------------

@@ -7,8 +7,7 @@ public:
     Grid(int ms, int lt);
     
     void update();
-    void draw(float f);
-    void drawThickLine(ofVec2f rate1, ofVec2f rate2);
+    void draw(float f, float lowerT);
     void setSpeed(float s);
     void setCenter(ofVec2f* c, int inc);
     float fRand(float fMin, float fMax);

@@ -13,7 +13,6 @@ Grid::Grid(int ms, int inc)
 
     // FADE
     fbo.allocate(ofGetWindowWidth(), ofGetWindowHeight(), GL_RGBA32F_ARB); // with alpha, 8 bits red, 8 bits green, 8 bits blue, 8 bits alpha, from 0 to 255 in 256 steps
-    
     fbo.begin();
     ofClear(255,255,255, 0);
     fbo.end();
@@ -46,7 +45,7 @@ void Grid::update(){
 }
 
 //--------------------------------------------------------------
-void Grid::draw(float f){
+void Grid::draw(float f, float lowerT){
     // FADE
     fbo.begin();
     float fade = f;
@@ -62,6 +61,27 @@ void Grid::draw(float f){
     float xRate = 1;
     float yRate = 1;
 
+    // DRAW CENTER OF GRID
+    for(int ii = 0; ii < increment; ii ++)
+    {
+        for(int j = 0; j < 4; j ++)
+        {
+            ofVec2f p1;
+            p1.set(center + (lowerT) * *lines.at(ii).at(j));
+            ofVec2f p2;
+            p2.set(center + (lowerT) * *lines.at(ii+1).at(j));
+            ofVec2f p3;
+            p3.set(center + (lowerT + 1.0/increment) * *lines.at(ii).at(j));
+            ofVec2f p4;
+            p4.set(center + (lowerT + 1.0/increment) * *lines.at(ii+1).at(j));
+            
+            ofDrawLine(p1,p2);
+            ofDrawLine(p2,p4);
+        }
+    }
+
+
+    // DRAW GRID
     for(int i = 0; i < increment-1; i ++)
     {
         for(int ii = 0; ii < increment; ii ++)
@@ -69,14 +89,14 @@ void Grid::draw(float f){
             for(int j = 0; j < 4; j ++)
             {
                 ofVec2f p1;
-                p1.set(center + ofWrap(t + 1.0/increment * i, 0, 1) * *lines.at(ii).at(j));
+                p1.set(center + (lowerT + ofWrap(t + 1.0/increment * i, 0, 1)) * *lines.at(ii).at(j));
                 ofVec2f p2;
-                p2.set(center + ofWrap(t + 1.0/increment * i, 0, 1) * *lines.at(ii+1).at(j));
+                p2.set(center + (lowerT + ofWrap(t + 1.0/increment * i, 0, 1)) * *lines.at(ii+1).at(j));
                 ofVec2f p3;
-                p3.set(center + ofWrap(t + 1.0/increment * i + 1.0/increment, 0, 1) * *lines.at(ii).at(j));
+                p3.set(center + (lowerT + ofWrap(t + 1.0/increment * i + 1.0/increment, 0, 1)) * *lines.at(ii).at(j));
                 ofVec2f p4;
-                p4.set(center + ofWrap(t + 1.0/increment * i + 1.0/increment, 0, 1) * *lines.at(ii+1).at(j));
-                
+                p4.set(center + (lowerT + ofWrap(t + 1.0/increment * i + 1.0/increment, 0, 1)) * *lines.at(ii+1).at(j));
+
                 ofDrawLine(p1,p2);
                 ofDrawLine(p2,p4);
                 ofDrawLine(p4,p3);
@@ -86,7 +106,9 @@ void Grid::draw(float f){
     }
     
     fbo.end();
+    ofEnableBlendMode(OF_BLENDMODE_ADD);
     fbo.draw(0,0);
+    ofEnableBlendMode(OF_BLENDMODE_ALPHA);
 
 }
 
