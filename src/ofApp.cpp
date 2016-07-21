@@ -11,26 +11,26 @@ void ofApp::setup(){
     ofSetFrameRate(120);
 
     loadFile();
-    
+
     // FADE
     fbo.allocate(ofGetWindowWidth(), ofGetWindowHeight(), GL_RGBA32F_ARB); // with alpha, 8 bits red, 8 bits green, 8 bits blue, 8 bits alpha, from 0 to 255 in 256 steps
 
     fbo.begin();
     ofClear(255,255,255, 0);
     fbo.end();
-    
+
     // WANDERING CIRCLES
     for (int i=1; i<=1; i++)
     {
         wanderingCircles.push_back(new WobblingCircles());
     }
-    
+
     // TRON
     for (int i=1; i<=1; i++)
     {
         trons.push_back(new Trons());
     }
-    
+
     // GRID
     grid = new Grid(1,5);
 
@@ -44,12 +44,12 @@ void ofApp::setup(){
     //serial.setup("/dev/tty.usbserial-A4001JEC", baud); // mac osx example
     //	serial.setup("/dev/ttyUSB0", baud); //linux example
 
-
+    sampler = PdSampler();
 }
 
 //--------------------------------------------------------------
 void ofApp::update(){
-
+    sampler.setBikeSpeed(ofRandom(0,1));
     // SERIAL
     int nTimesRead  = 0;  // a temp variable to keep count per read
     int nRead  = 0;  // a temp variable to keep count per read
@@ -87,20 +87,20 @@ void ofApp::drawLines(int lineCount)
         for( int a = 0; a < lineCount; a = a + 1 )
         {
             ofPath line;
-    
+
             line.setFilled(false);
             line.setStrokeWidth(15);
             line.setCurveResolution(200);
-    
-    
+
+
             int brightness = ofRandom( 0, 255 );
             line.setStrokeColor( ofColor(brightness, brightness, brightness));
-    
+
             line.curveTo( ofPoint(rand() % (ofGetWindowWidth() + 2*buffer) - buffer, rand() % (ofGetWindowHeight() + 2*buffer)-buffer));
             line.curveTo( ofPoint(rand() % (ofGetWindowWidth() + 2*buffer) - buffer, rand() % (ofGetWindowHeight() + 2*buffer)-buffer));
             line.curveTo( ofPoint(rand() % (ofGetWindowWidth() + 2*buffer) - buffer, rand() % (ofGetWindowHeight() + 2*buffer)-buffer));
             line.curveTo( ofPoint(rand() % (ofGetWindowWidth() + 2*buffer) - buffer, rand() % (ofGetWindowHeight() + 2*buffer)-buffer));
-            
+
             line.draw();
         }
 
@@ -127,7 +127,7 @@ void ofApp::draw(){
 	for (int j = 0; j < 10000; j++){
 		//	ofDrawCircle(ofRandom(0,850), ofRandom(0,600),20);
 
-	}    
+	}
 
     // DRAW TRONS
     ofSetColor(255,255,255);
@@ -141,7 +141,7 @@ void ofApp::draw(){
     {
         (*it)->draw(gui->wandCircFade);
     }
-    
+
     // GRID
     if (gui->gridOn)
     {
@@ -163,7 +163,7 @@ void ofApp::keyPressed(int key){
             ofToggleFullscreen();
         break;
     }
-    
+
 }
 
 //--------------------------------------------------------------
@@ -173,7 +173,7 @@ void ofApp::keyReleased(int key){
 
 //--------------------------------------------------------------
 void ofApp::mouseMoved(int x, int y){
-    
+
 }
 
 //--------------------------------------------------------------
@@ -219,7 +219,7 @@ void ofApp::gotMessage(ofMessage msg){
 }
 
 //--------------------------------------------------------------
-void ofApp::dragEvent(ofDragInfo dragInfo){ 
+void ofApp::dragEvent(ofDragInfo dragInfo){
 
 }
 
@@ -227,7 +227,7 @@ void ofApp::dragEvent(ofDragInfo dragInfo){
 void ofApp::loadFile()
 {
 
-        
-        
+
+
 
 }

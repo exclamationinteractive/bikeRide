@@ -5,6 +5,7 @@
 #include "WobblingCircles.hpp"
 #include "Trons.hpp"
 #include "Grid.hpp"
+#include "PdSampler.h"
 //#include "ofxJSON.h"
 
 class ofApp : public ofBaseApp{
@@ -14,7 +15,7 @@ class ofApp : public ofBaseApp{
     void setup();
 	void update();
 	void draw();
-	
+
 	void keyPressed(int key);
 	void keyReleased(int key);
 	void mouseMoved(int x, int y);
@@ -32,7 +33,7 @@ class ofApp : public ofBaseApp{
 
 //    GuiApp* gui;
     std::shared_ptr<GuiApp> gui;
-    
+
     // FADE
     int fadeAmnt;
     ofFbo fbo; // with alpha
@@ -43,5 +44,8 @@ class ofApp : public ofBaseApp{
 
     std::vector<WobblingCircles*> wanderingCircles;
     std::vector<Trons*> trons;
+
+		// PD osc sampler thingy
+		PdSampler sampler;
 
 };
