@@ -7,7 +7,7 @@ public:
     Tron(int ms, int lt, float centerOffset);
     
     void update();
-    void draw(float lowerT);
+    void draw(float lowerT, int windWidth, int windHeight);
     void drawThickLine(ofVec2f rate1, ofVec2f rate2, float lowerT);
     bool shouldDelete();
     float fRand(float fMin, float fMax);

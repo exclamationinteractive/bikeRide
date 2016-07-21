@@ -77,8 +77,7 @@ void Grid::draw(float f, float lowerT){
             
             ofDrawLine(p1,p2);
             ofDrawLine(p2,p4);
-        }
-    }
+        }    }
 
 
     // DRAW GRID
@@ -147,4 +146,7 @@ float Grid::fRand(float fMin, float fMax)
 //--------------------------------------------------------------
 void Grid::windowResized(int w, int h){
     fbo.allocate(ofGetWindowWidth(), ofGetWindowHeight(), GL_RGBA32F_ARB); // with alpha, 8 bits red, 8 bits green, 8 bits blue, 8 bits alpha, from 0 to 255 in 256 steps
+    fbo.begin();
+    ofClear(255,255,255, 0);
+    fbo.end();
 }

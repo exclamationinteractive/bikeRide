@@ -22,13 +22,15 @@ void GuiApp::setup(){
 
     gui.add(wandCircFade.setup("circFade",1,0,1));
     gui.add(wandCircRadius.setup("radius",1,0,100));
-    gui.add(wandCircCount.setup("count",100,0,100));
+    gui.add(wandCircCount.setup("count",100,0,10000));
+    gui.add(wandCircAddFreq.setup("add freq",100,0,100));
     gui.add(wandCircMaxSpeed.setup("maxSpeed",10,1,100));
     gui.add(wandCircMaxAccel.setup("maxAccel",10,1,100));
     gui.add(wandCircAccelFreq.setup("accelFreq",10,1,100));
     gui.add(wandCircGravityStrength.setup("gravStrenth",10,1,3000));
     gui.add(wandCircGravityAttractiveScale.setup("GravScale",1,-1,1));
     gui.add(wandCircGravityAttractivePower.setup("GravPow",1,0,5));
+    gui.add(wandRotationDistance.setup("wand rot dist",0,0,300));
 
     gui.add(fade.setup("tron fade",0.5,0,1));
     gui.add(tronCount.setup("tron count",100,0,100));

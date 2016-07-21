@@ -22,9 +22,11 @@ public:
     ofxIntSlider wandCircAccelFreq;
     ofxIntSlider wandCircRadius;
     ofxIntSlider wandCircCount;
+    ofxIntSlider wandCircAddFreq;
     ofxIntSlider wandCircGravityStrength;
     ofxIntSlider wandCircGravityAttractiveScale;
     ofxIntSlider wandCircGravityAttractivePower;
+    ofxIntSlider wandRotationDistance;
 
     ofxFloatSlider fade;
     ofxIntSlider tronMaxSpeed;

@@ -71,7 +71,7 @@ void Tron::drawThickLine(ofVec2f rate1, ofVec2f rate2, float lowerT)
 
 }
 //--------------------------------------------------------------
-void Tron::draw(float lowerT){
+void Tron::draw(float lowerT, int windWidth, int windHeight){
     float x = 0;
     float y = 0;
     float z = 0;
@@ -90,10 +90,10 @@ void Tron::draw(float lowerT){
     p4.set(center + (t + lowerT) * l4Rate);
     
     ofSetColor(0,0,0);
-    ofDrawRectangle(0,0,ofGetWindowWidth(),p1.y);
-    ofDrawRectangle(0,0,p1.x,ofGetWindowHeight());
-    ofDrawRectangle(0,p3.y,ofGetWindowWidth(),ofGetWindowHeight());
-    ofDrawRectangle(p3.x,0,ofGetWindowWidth(),ofGetWindowHeight());
+    ofDrawRectangle(0,0,windWidth,p1.y);
+    ofDrawRectangle(0,0,p1.x,windHeight);
+    ofDrawRectangle(0,p3.y,windWidth,windHeight);
+    ofDrawRectangle(p3.x,0,windWidth,windHeight);
 
     ofSetColor(255,255,255);
 

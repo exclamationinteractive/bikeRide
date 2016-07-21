@@ -59,9 +59,11 @@ void Trons::draw(float f, float lowerT){
     
     ofSetColor(255,255,255,255);
     
+    int windWidth = ofGetWindowWidth();
+    int windHeight = ofGetWindowHeight();
     for (std::vector<Tron*>::reverse_iterator it = trons.rbegin() ; it != trons.rend(); ++it)
     {
-        (*it)->draw(lowerT);
+        (*it)->draw(lowerT, windWidth, windHeight);
     }
     fbo.end();
     
@@ -73,4 +75,7 @@ void Trons::draw(float f, float lowerT){
 //--------------------------------------------------------------
 void Trons::windowResized(int w, int h){
     fbo.allocate(ofGetWindowWidth(), ofGetWindowHeight(), GL_RGBA32F_ARB); // with alpha, 8 bits red, 8 bits green, 8 bits blue, 8 bits alpha, from 0 to 255 in 256 steps
+    fbo.begin();
+    ofClear(255,255,255, 0);
+    fbo.end();
 }

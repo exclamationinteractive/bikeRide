@@ -10,7 +10,7 @@ int main( ){
 //	settings.setGLVersion(3,2);
 //	ofCreateWindow(settings);
     
-//    ofSetupOpenGL(1024,768, OF_WINDOW);			// <-------- setup the GL context
+//   ofSetupOpenGL(1024,768, OF_WINDOW);			// <-------- setup the GL context
 
     
 	// this kicks off the running of my app
@@ -21,11 +21,12 @@ int main( ){
     
     
     ofGLFWWindowSettings settings;
-    settings.width = 600;
-    settings.height = 600;
+    settings.width = 1280;
+    settings.height = 800;
     settings.setPosition(ofVec2f(300,0));
+
     auto mainWindow = ofCreateWindow(settings);
-//    shared_ptr<ofAppBaseWindow> mainWindow = ofCreateWindow(settings);
+    //shared_ptr<ofAppBaseWindow> mainWindow = ofCreateWindow(settings);
 
     
     settings.width = 300;
@@ -39,10 +40,11 @@ int main( ){
 //    int* fadeGui = &guiApp->fadeGuiInt;
     auto mainApp = make_shared<ofApp>(guiApp);
 
+
     ofRunApp(guiWindow, guiApp);
     ofRunApp(mainWindow, mainApp);
     ofRunMainLoop();
-
+//	ofRunApp( new ofApp(guiApp));
 }
 
 

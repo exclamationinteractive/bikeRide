@@ -1,10 +1,11 @@
 #pragma once
 
 #include "ofMain.h"
-#include "guiApp.h"
+#include "GuiApp.h"
 #include "WobblingCircles.hpp"
 #include "Trons.hpp"
 #include "Grid.hpp"
+//#include "ofxJSON.h"
 
 class ofApp : public ofBaseApp{
 	public:
@@ -25,7 +26,8 @@ class ofApp : public ofBaseApp{
 	void gotMessage(ofMessage msg);
     void drawLines(int lineCount);
     void drawCircles(int circleCount);
-    
+    void loadFile();
+
     Grid* grid;
 
 //    GuiApp* gui;

@@ -10,6 +10,8 @@ void ofApp::setup(){
     ofBackground(0,0,0);
     ofSetFrameRate(120);
 
+    loadFile();
+    
     // FADE
     fbo.allocate(ofGetWindowWidth(), ofGetWindowHeight(), GL_RGBA32F_ARB); // with alpha, 8 bits red, 8 bits green, 8 bits blue, 8 bits alpha, from 0 to 255 in 256 steps
 
@@ -47,7 +49,7 @@ void ofApp::setup(){
 
 //--------------------------------------------------------------
 void ofApp::update(){
-    
+
     // SERIAL
     int nTimesRead  = 0;  // a temp variable to keep count per read
     int nRead  = 0;  // a temp variable to keep count per read
@@ -61,15 +63,13 @@ void ofApp::update(){
     // WANDERING CIRCLES
     for (std::vector<WobblingCircles*>::iterator it = wanderingCircles.begin() ; it != wanderingCircles.end(); ++it)
     {
-        (*it)->update(gui->wandCircCount, gui->wandCircMaxSpeed, gui->wandCircRadius, gui->wandCircMaxAccel, gui->wandCircAccelFreq, gui->wandCircGravityStrength, gui->wandCircGravityAttractiveScale, gui->wandCircGravityAttractivePower);
+        (*it)->update(gui->wandCircCount, gui->wandCircAddFreq, gui->wandCircMaxSpeed, gui->wandCircRadius, gui->wandCircMaxAccel, gui->wandCircAccelFreq, gui->wandCircGravityStrength, gui->wandCircGravityAttractiveScale, gui->wandCircGravityAttractivePower, new ofVec2f(ofGetWindowWidth()/2.0+gui->rotation*gui->wandRotationDistance, ofGetMouseY()));
     }
-    
     // TRON
     for (std::vector<Trons*>::iterator it = trons.begin() ; it != trons.end(); ++it)
     {
         (*it)->update(gui->tronCount, gui->tronLineThickness, gui->tronMaxSpeed, gui->rotation*gui->tronRotationDistance);
     }
-
 
     // GRID
     grid->setSpeed(gui->gridSpeed);
@@ -123,23 +123,12 @@ void ofApp::drawCircles(int circleCount)
 //--------------------------------------------------------------
 void ofApp::draw(){
 
-    
-    fbo.begin();
+	ofSetHexColor(0x0cb0b6);
+	for (int j = 0; j < 10000; j++){
+		//	ofDrawCircle(ofRandom(0,850), ofRandom(0,600),20);
 
-    // FADE
-    float fade = gui->fade;
-    ofSetColor(0,0,0,255*(pow(fade,3)));
-    ofDrawRectangle(0,0,fbo.getWidth(), fbo.getHeight());
+	}    
 
-//    drawLines(*countGuiIntPointer);
-//    drawCircles(*countGuiIntPointer);
-
-    
-    fbo.end();
-    
-    fbo.draw(0,0);
-
-    
     // DRAW TRONS
     ofSetColor(255,255,255);
     for (std::vector<Trons*>::iterator it = trons.begin() ; it != trons.end(); ++it)
@@ -205,6 +194,9 @@ void ofApp::mouseReleased(int x, int y, int button){
 //--------------------------------------------------------------
 void ofApp::windowResized(int w, int h){
     fbo.allocate(ofGetWindowWidth(), ofGetWindowHeight(), GL_RGBA32F_ARB); // with alpha, 8 bits red, 8 bits green, 8 bits blue, 8 bits alpha, from 0 to 255 in 256 steps
+    fbo.begin();
+    ofClear(255,255,255, 0);
+    fbo.end();
 
     // WANDERING CIRCLES
     for (std::vector<WobblingCircles*>::iterator it = wanderingCircles.begin() ; it != wanderingCircles.end(); ++it)
@@ -228,5 +220,14 @@ void ofApp::gotMessage(ofMessage msg){
 
 //--------------------------------------------------------------
 void ofApp::dragEvent(ofDragInfo dragInfo){ 
+
+}
+
+
+void ofApp::loadFile()
+{
+
+        
+        
 
 }
