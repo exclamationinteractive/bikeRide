@@ -13,7 +13,8 @@ public:
 
     ofxPanel gui;
 
-    ofxFloatSlider fade;
+    ofxFloatSlider rotation;
+    ofxFloatSlider speed;
 
     ofxFloatSlider wandCircFade;
     ofxIntSlider wandCircMaxSpeed;
@@ -21,19 +22,25 @@ public:
     ofxIntSlider wandCircAccelFreq;
     ofxIntSlider wandCircRadius;
     ofxIntSlider wandCircCount;
+    ofxIntSlider wandCircAddFreq;
     ofxIntSlider wandCircGravityStrength;
     ofxIntSlider wandCircGravityAttractiveScale;
     ofxIntSlider wandCircGravityAttractivePower;
+    ofxIntSlider wandRotationDistance;
 
+    ofxFloatSlider fade;
     ofxIntSlider tronMaxSpeed;
     ofxIntSlider tronCount;
     ofxIntSlider tronLineThickness;
+    ofxFloatSlider tronLowerT;
+    ofxFloatSlider tronRotationDistance;
     
     ofxToggle gridOn;
     ofxFloatSlider gridFade;
     ofxIntSlider gridSpeed;
-    ofxFloatSlider gridIterations;
-    
-    
+    ofxIntSlider gridIterations;
+    ofxFloatSlider gridLowerT;
+    ofxFloatSlider gridRotationDistance;
+
 
 };

@@ -1,10 +1,11 @@
 #pragma once
 
 #include "ofMain.h"
-#include "guiApp.h"
+#include "GuiApp.h"
 #include "WobblingCircles.hpp"
-#include "Tron.hpp"
+#include "Trons.hpp"
 #include "Grid.hpp"
+//#include "ofxJSON.h"
 
 class ofApp : public ofBaseApp{
 	public:
@@ -25,7 +26,8 @@ class ofApp : public ofBaseApp{
 	void gotMessage(ofMessage msg);
     void drawLines(int lineCount);
     void drawCircles(int circleCount);
-    
+    void loadFile();
+
     Grid* grid;
 
 //    GuiApp* gui;
@@ -35,8 +37,11 @@ class ofApp : public ofBaseApp{
     int fadeAmnt;
     ofFbo fbo; // with alpha
 
+    // SERIAL
+    ofSerial	serial;
+    float speed;
 
     std::vector<WobblingCircles*> wanderingCircles;
-    std::vector<Tron*> trons;
+    std::vector<Trons*> trons;
 
 };

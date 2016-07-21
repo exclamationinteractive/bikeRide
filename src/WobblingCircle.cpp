@@ -47,15 +47,14 @@ void WobblingCircle::update(){
     pos = pos + vel * ofGetLastFrameTime() * 100;
     vel = vel + accel * ofGetLastFrameTime() * 100;
     
-
     for (std::vector<GravityCenter>::iterator it = gravityCenters.begin() ; it != gravityCenters.end(); ++it)
     {
-        it->center = *new ofVec2f(ofGetMouseX(), ofGetMouseY());
+//        it->center = *new ofVec2f(ofGetMouseX(), ofGetMouseY());
         float gravDist = it->center.distance(pos);
 
-        if (gravDist > 200){
+//        if (gravDist > 200){
             vel = vel + it->attractiveScale * ((pos-it->center).normalize() * it->strength / pow(gravDist,it->power)) * ofGetLastFrameTime() * 100;
-        }
+//        }
 //        if (gravDist < 300)
 //        {
 //            vel = vel + 0.01*((pos-it->center).normalize() * it->strength / (gravDist));
@@ -82,7 +81,6 @@ void WobblingCircle::update(){
         accel.set(fRand(-maxAccel, maxAccel), fRand(-maxAccel, maxAccel));
     }
 
-
 }
 
 void WobblingCircle::setMaxSpeed(float ms, float ma, int acf)
@@ -100,18 +98,26 @@ void WobblingCircle::setGravityStrength(int strength, int attractiveScale, int p
         it->attractiveScale = attractiveScale;
         it->power = power;
     }
+}
 
+void WobblingCircle::setGravityCenter(ofVec2f* c)
+{
+    for (std::vector<GravityCenter>::iterator it = gravityCenters.begin() ; it != gravityCenters.end(); ++it)
+    {
+        it->center = *c;
+    }
 }
 
 
 //--------------------------------------------------------------
 void WobblingCircle::draw(){
     ofDrawCircle(pos.x,pos.y,radius);
+//ofDrawLine(pos.x,pos.y,0,0);
 }
 
-bool WobblingCircle::shouldDelete()
+bool WobblingCircle::shouldDelete(int windowWidth, int windowHeight)
 {
-    if (pos.x < -500 || pos.y < -500 || pos.x > ofGetWindowWidth() + 500 || pos.y > ofGetWindowHeight() + 500)
+    if (pos.x < -500 || pos.y < -500 || pos.x > windowWidth + 500 || pos.y > windowHeight + 500)
     {
         return true;
     }

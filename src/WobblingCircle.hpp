@@ -9,9 +9,11 @@ public:
 
     void update();
     void draw();
-    bool shouldDelete();
+    // bool shouldDelete();
+    bool shouldDelete(int windowWidth, int windowHeight);
     void setGravityStrength(int strength, int attractiveScale, int power);
     void setMaxSpeed(float ms, float ma, int acf);
+    void setGravityCenter(ofVec2f* c);
     float fRand(float fMin, float fMax);
  
     ofxPanel gui;
