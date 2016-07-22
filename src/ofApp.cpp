@@ -157,6 +157,11 @@ void ofApp::draw(){
 
 //--------------------------------------------------------------
 void ofApp::keyPressed(int key){
+  sampler.setSong(1, 2);
+  sampler.cueTrack(1, 0.5);
+  sampler.setGain(1, 0.5, 1000);
+
+
     switch(key)
     {
         case 'f':

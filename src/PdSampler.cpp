@@ -15,7 +15,7 @@ void PdSampler::setSong(int _player, int _song){
 
 void PdSampler::setGain(int _player, float _gain, int _time){
   ofxOscMessage m;
-  m.setAddress("/sampler/load");
+  m.setAddress("/sampler/gain");
   m.addIntArg(_player);
   m.addFloatArg(_gain);
   m.addIntArg(_time);

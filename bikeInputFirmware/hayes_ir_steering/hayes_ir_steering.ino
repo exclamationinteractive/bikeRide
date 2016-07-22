@@ -7,11 +7,12 @@ void setup() {
 }
 
 void loop() {
+//  Serial.println(analogRead(0));
   if(Serial.available()){
     Serial.read();
-    Serial.print(counter, DEC);
+    Serial.println(counter);
     counter = 0;
-    Serial.println( map( analogRead(0), 0, 332, 0, 200), DEC);
+    Serial.println( map( analogRead(0), 270, 820, 0, 200));
   }
   if(digitalRead(7) != stat){
     stat = !stat;
