@@ -30,11 +30,9 @@ public:
 
     ofxFloatSlider wandCircAlpha;
     ofxFloatSlider wandCircFade;
-
     ofxFloatSlider wandCircSpeedScale;
     ofxFloatSlider wandCircMaxAccel;
     ofxFloatSlider wandCircAccelFreq;
-
     ofxIntSlider wandCircRadius;
     ofxIntSlider wandCircCount;
     ofxIntSlider wandCircAddFreq;

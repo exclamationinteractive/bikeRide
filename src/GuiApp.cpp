@@ -17,7 +17,7 @@ GuiApp::GuiApp()
 void GuiApp::setup(){
     gui.setup();
 
-    gui.add(manualMode.setup("manual",true));
+    gui.add(manualMode.setup("manual",false));
 
     gui.add(bikeControlled.setup("bike control",true));
     
@@ -34,7 +34,7 @@ void GuiApp::setup(){
 
     gui.add(wandCircAlpha.setup("circAlpha",1,0,1));
     gui.add(wandCircFade.setup("circFade",1,0,1));
-    gui.add(wandCircRadius.setup("radius",1,1,100));
+    gui.add(wandCircRadius.setup("radius",1,1,10));
     gui.add(wandCircCount.setup("count",100,0,10000));
     gui.add(wandCircAddFreq.setup("add freq",100,0,100));
     gui.add(wandCircSpeedScale.setup("wand speed scale",1,0,10));
@@ -52,13 +52,13 @@ void GuiApp::setup(){
     gui.add(tronSpeedScale.setup("tron speed scale",10,1,30));
     gui.add(tronLowerT.setup("tron lower t",0,0,1));
     gui.add(tronRotationDistanceX.setup("tron rot dist x",0,0,500));
-    gui.add(tronRotationDistanceX.setup("tron rot dist y",0,0,500));
+    gui.add(tronRotationDistanceY.setup("tron rot dist y",0,0,500));
 
     gui.add(gridAlpha.setup("grid alpha", 1,0,1));
     gui.add(gridFade.setup("grid fade", 0,0,1));
     gui.add(gridSpeedScale.setup("grid speed scale",0,0,2));
     gui.add(gridIterationsX.setup("grid iterationX",5,0,30));
-    gui.add(gridIterationsY.setup("grid iterationY",5,0,30));
+    gui.add(gridIterationsY.setup("grid iterationY",2,0,30));
     gui.add(gridLowerT.setup("grid lower T",0.5,0,1));
     gui.add(gridRotationDistanceX.setup("grid rot dist X",0,0,500));
     gui.add(gridRotationDistanceY.setup("grid rot dist Y",0,0,500));

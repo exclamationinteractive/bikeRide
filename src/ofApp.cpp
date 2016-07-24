@@ -56,44 +56,50 @@ void ofApp::update(){
 
     if (!gui->manualMode)
     {
+        gui->manualMode = !gui->manualMode;
         // ofxJSONElement a = scenes.get(currentScene,0);
+        sceneTime=10;
         // sceneTime += ofGetLastFrameTime();
 
         // // GLOBAL
-        // // gui->perspective = getValue(a.get("perspective", 0), sceneTime);
+        // gui->perspective = getValue("perspective", "default", sceneTime);
+        gui->centerX = getValue("centerX", "default", sceneTime);
+        gui->centerY = getValue("centerY", "default", sceneTime);
+        gui->bikeCenteringCenter = getValue("bikecalab-cent", "default", sceneTime);
+        gui->bikeCenteringScale = getValue("bikecalab-scale", "default", sceneTime);
  
         // // GRID
-        // gui->gridAlpha = getValue("grid-alpha", currentScene, sceneTime);
-        // gui->gridFade = getValue("grid-fade", currentScene,sceneTime);
-        // // gui->gridIterationsX = getValue("grid-iterationsX", currentScene, sceneTime);
-        // // gui->gridIterationsY = getValue("grid-iterationsX", currentScene, sceneTime);
-        // gui->gridSpeedScale = getValue("grid-speed-scale", currentScene, sceneTime);
-        // gui->gridLowerT = getValue("grid-lower-t", currentScene, sceneTime);
-        // gui->gridRotationDistanceX = getValue("grid-rot-dist-x", currentScene, sceneTime);
-        // gui->gridRotationDistanceY = getValue("grid-rot-dist-y", currentScene, sceneTime);
+        gui->gridAlpha = getValue("grid-alpha", currentScene, sceneTime);
+        gui->gridFade = getValue("grid-fade", currentScene,sceneTime);
+        gui->gridIterationsX = getValue("grid-iterationsX", currentScene, sceneTime);
+        gui->gridIterationsY = getValue("grid-iterationsY", currentScene, sceneTime);
+        gui->gridSpeedScale = getValue("grid-speed-scale", currentScene, sceneTime);
+        gui->gridLowerT = getValue("grid-lower-t", currentScene, sceneTime);
+        gui->gridRotationDistanceX = getValue("grid-rot-dist-x", currentScene, sceneTime);
+        gui->gridRotationDistanceY = getValue("grid-rot-dist-y", currentScene, sceneTime);
 
         // // WANDERING CIRCLES
-        // gui->wandCircAlpha = getValue("wob-alpha", currentScene, sceneTime);
-        // gui->wandCircFade = getValue("wob-fade", currentScene,sceneTime);
-        // gui->wandCircCount = getValue("wob-count", currentScene,sceneTime);
-        // gui->wandCircAddFreq = getValue("wob-add-freq", currentScene,sceneTime);
-        // gui->wandCircRadius = getValue("wob-radius", currentScene,sceneTime);
-        // gui->wandCircMaxSpeed = getValue("wob-max-speed", currentScene,sceneTime);
-        // gui->wandCircMaxAccel = getValue("wob-max-accel", currentScene, sceneTime);
-        // gui->wandCircAccelFreq = getValue("wob-accel-freq", currentScene, sceneTime);
-        // gui->wandCircGravityStrength = getValue("wob-grav-strength", currentScene, sceneTime);
-        // gui->wandCircGravityScale = getValue("wob-grav-scale", currentScene, sceneTime);
-        // gui->wandCircGravityPower = getValue("wob-grav-power", currentScene, sceneTime);
+        gui->wandCircAlpha = getValue("wob-alpha", currentScene, sceneTime);
+        gui->wandCircFade = getValue("wob-fade", currentScene,sceneTime);
+        gui->wandCircCount = getValue("wob-count", currentScene,sceneTime);
+        gui->wandCircAddFreq = getValue("wob-add-freq", currentScene,sceneTime);
+        gui->wandCircRadius = getValue("wob-radius", currentScene,sceneTime);
+        gui->wandCircSpeedScale = getValue("wob-max-speed", currentScene,sceneTime);
+        gui->wandCircMaxAccel = getValue("wob-max-accel", currentScene, sceneTime);
+        gui->wandCircAccelFreq = getValue("wob-accel-freq", currentScene, sceneTime);
+        gui->wandCircGravityStrength = getValue("wob-grav-strength", currentScene, sceneTime);
+        gui->wandCircGravityScale = getValue("wob-grav-scale", currentScene, sceneTime);
+        gui->wandCircGravityPower = getValue("wob-grav-power", currentScene, sceneTime);
 
         // // TRON
-        // gui->tronAlpha = getValue("tron-alpha", currentScene, sceneTime);
-        // gui->tronFade = getValue("tron-fade", currentScene, sceneTime);
-        // gui->tronCount = getValue("tron-count", currentScene, sceneTime);
-        // gui->tronLineThickness = getValue("tron-width", currentScene, sceneTime);
-        // gui->tronSpeedScale = getValue("tron-speed-scale", currentScene, sceneTime);
-        // gui->tronLowerT = getValue("tron-lower-t", currentScene, sceneTime);
-        // gui->tronRotationDistanceX = getValue("tron-rot-dist-x", currentScene, sceneTime);
-        // gui->tronRotationDistanceY = getValue("tron-rot-dist-y", currentScene, sceneTime);
+        gui->tronAlpha = getValue("tron-alpha", currentScene, sceneTime);
+        gui->tronFade = getValue("tron-fade", currentScene, sceneTime);
+        gui->tronCount = getValue("tron-count", currentScene, sceneTime);
+        gui->tronLineThickness = getValue("tron-width", currentScene, sceneTime);
+        gui->tronSpeedScale = getValue("tron-speed-scale", currentScene, sceneTime);
+        gui->tronLowerT = getValue("tron-lower-t", currentScene, sceneTime);
+        gui->tronRotationDistanceX = getValue("tron-rot-dist-x", currentScene, sceneTime);
+        gui->tronRotationDistanceY = getValue("tron-rot-dist-y", currentScene, sceneTime);
     }
 
     // SERIAL
@@ -115,15 +121,15 @@ void ofApp::update(){
             a = bytesReturned[0];
             b = bytesReturned[1];
 
-            cout << "data:";
-            cout << a;
-            cout << ":";
-            cout << b;
-            cout << ":\n";
+            // cout << "data:";
+            // cout << a;
+            // cout << ":";
+            // cout << b;
+            // cout << ":\n";
      
             speed = a;
             float bikeScale = gui->bikeCenteringScale;
-            float new_rotation = (b - gui->bikeCenteringCenter)/bikeScale;
+            float new_rotation = 1-(b - gui->bikeCenteringCenter)/bikeScale;
             rotation = rotation + (new_rotation - rotation )/2.0;
             if (gui->bikeControlled)
             {
@@ -147,7 +153,7 @@ void ofApp::update(){
     // TRON
     for (std::vector<Trons*>::iterator it = trons.begin() ; it != trons.end(); ++it)
     {
-        (*it)->update(gui->tronCount, gui->tronLineThickness, speed * gui->tronSpeedScale, new ofVec2f(gui->centerX+rotation*gui->tronRotationDistanceX, gui->centerY - cos(rotation)*gui->tronRotationDistanceY));
+        (*it)->update(1-gui->tronCount, gui->tronLineThickness, speed * gui->tronSpeedScale / 10.0, new ofVec2f(gui->centerX+rotation*gui->tronRotationDistanceX, gui->centerY - cos(rotation)*gui->tronRotationDistanceY));
     }
 
     // GRID
@@ -167,9 +173,120 @@ void ofApp::receiveOSC(){
     float val = 0;
 		// print incomming addr
     cout << m.getAddress() << endl;
-		if(m.getAddress() == "/grid/whatever"){
-			 val = m.getArgAsFloat(0);
-		}
+
+    if(m.getAddress() == "/grid/gridAlpha"){
+        val = m.getArgAsFloat(0);
+        cout << val;
+        gui->gridAlpha = m.getArgAsFloat(0);
+    }
+    else if(m.getAddress() == "/grid/gridFade"){
+        val = m.getArgAsFloat(0);
+        gui->gridFade = m.getArgAsFloat(0);
+    }
+    else if(m.getAddress() == "/grid/gridSpeedScale"){
+        val = m.getArgAsFloat(0);
+        gui->gridSpeedScale = m.getArgAsFloat(0);
+    }
+    else if(m.getAddress() == "/grid/gridIterationsX"){
+        val = m.getArgAsFloat(0);
+        gui->gridIterationsX = (int)(m.getArgAsFloat(0)*gui->gridIterationsX.getMax());
+    }
+    else if(m.getAddress() == "/grid/gridIterationsY"){
+        val = m.getArgAsFloat(0);
+        gui->gridIterationsY = (int)(m.getArgAsFloat(0)*gui->gridIterationsY.getMax());
+    }
+    else if(m.getAddress() == "/grid/gridLowerT"){
+        val = m.getArgAsFloat(0);
+        gui->gridLowerT = m.getArgAsFloat(0);
+    }
+    else if(m.getAddress() == "/grid/gridRotationDistanceX"){
+        val = m.getArgAsFloat(0);
+        gui->gridRotationDistanceX = (int)(m.getArgAsFloat(0)*gui->gridRotationDistanceX.getMax());
+    }
+    else if(m.getAddress() == "/grid/gridRotationDistanceY"){
+        val = m.getArgAsFloat(0);
+        gui->gridRotationDistanceY = (int)(m.getArgAsFloat(0)*gui->gridRotationDistanceY.getMax());
+    }
+    else if(m.getAddress() == "/wand/wandCircAlpha"){
+        val = m.getArgAsFloat(0);
+        gui->wandCircAlpha = m.getArgAsFloat(0);
+    }
+    else if(m.getAddress() == "/wand/wandCircFade"){
+        val = m.getArgAsFloat(0);
+        gui->wandCircFade = m.getArgAsFloat(0);
+    }
+    else if(m.getAddress() == "/wand/wandCircSpeedScale"){
+        val = m.getArgAsFloat(0);
+        gui->wandCircSpeedScale = m.getArgAsFloat(0) * gui->wandCircSpeedScale.getMax();
+    }
+    else if(m.getAddress() == "/wand/wandCircMaxAccel"){
+        val = m.getArgAsFloat(0);
+        gui->wandCircMaxAccel = m.getArgAsFloat(0) * gui->wandCircMaxAccel.getMax();
+    }
+    else if(m.getAddress() == "/wand/wandCircAccelFreq"){
+        val = m.getArgAsFloat(0);
+        gui->wandCircAccelFreq = m.getArgAsFloat(0) * gui->wandCircAccelFreq.getMax();
+    }
+    else if(m.getAddress() == "/wand/wandCircRadius"){
+        val = m.getArgAsFloat(0);
+        gui->wandCircRadius = (int)(m.getArgAsFloat(0)*gui->wandCircRadius.getMax()+1);
+    }
+    else if(m.getAddress() == "/wand/wandCircCount"){
+        val = m.getArgAsFloat(0);
+        gui->wandCircCount = (int)(m.getArgAsFloat(0)*gui->wandCircCount.getMax());
+    }
+    else if(m.getAddress() == "/wand/wandCircAddFreq"){
+        val = m.getArgAsFloat(0);
+        gui->wandCircAddFreq = (int)(m.getArgAsFloat(0)*gui->wandCircAddFreq.getMax());
+    }
+    else if(m.getAddress() == "/wand/wandCircGravityStrength"){
+        val = m.getArgAsFloat(0);
+        gui->wandCircGravityStrength = (int)(m.getArgAsFloat(0)*gui->wandCircGravityStrength.getMax());
+    }
+    else if(m.getAddress() == "/wand/wandCircGravityScale"){
+        val = m.getArgAsFloat(0);
+        gui->wandCircGravityScale = (int)(m.getArgAsFloat(0)*2-1;
+    }
+    else if(m.getAddress() == "/wand/wandCircGravityPower"){
+        val = m.getArgAsFloat(0);
+        gui->wandCircGravityPower = (int)(m.getArgAsFloat(0)*gui->wandCircGravityPower.getMax());
+    }
+    else if(m.getAddress() == "/wand/wandRotationDistance"){
+        val = m.getArgAsFloat(0);
+        gui->wandRotationDistance = (int)(m.getArgAsFloat(0)*gui->wandRotationDistance.getMax());
+    }
+    else if(m.getAddress() == "/tron/tronAlpha"){
+        val = m.getArgAsFloat(0);
+        gui->tronAlpha = m.getArgAsFloat(0);
+    }
+    else if(m.getAddress() == "/tron/tronFade"){
+        val = m.getArgAsFloat(0);
+        gui->tronFade = m.getArgAsFloat(0);
+    }
+    else if(m.getAddress() == "/tron/tronSpeedScale"){
+        val = m.getArgAsFloat(0);
+        gui->tronSpeedScale = m.getArgAsFloat(0)*gui->tronSpeedScale.getMax();
+    }
+    else if(m.getAddress() == "/tron/tronCount"){
+        val = m.getArgAsFloat(0);
+        gui->tronCount = m.getArgAsFloat(0);
+    }
+    else if(m.getAddress() == "/tron/tronLineThickness"){
+        val = m.getArgAsFloat(0);
+        gui->tronLineThickness = (int)(m.getArgAsFloat(0)*gui->tronLineThickness.getMax());
+    }
+    else if(m.getAddress() == "/tron/tronLowerT"){
+        val = m.getArgAsFloat(0);
+        gui->tronLowerT = m.getArgAsFloat(0);
+    }
+    else if(m.getAddress() == "/tron/tronRotationDistanceX"){
+        val = m.getArgAsFloat(0);
+        gui->tronRotationDistanceX = m.getArgAsFloat(0);
+    }
+    else if(m.getAddress() == "/tron/tronRotationDistanceY"){
+        val = m.getArgAsFloat(0);
+        gui->tronRotationDistanceY = m.getArgAsFloat(0);
+    }
   }
 }
 
@@ -337,18 +454,6 @@ void ofApp::dragEvent(ofDragInfo dragInfo){
 }
 
 
-//void ofApp::getValues(ofxJSONElement timeVals){
-//    for (Json::ArrayIndex i = 0; i < timeVals.size(); ++i)
-//    {
-//        ofxJSONElement timeVal = timeVals[i];
-//        for (Json::ArrayIndex j = 0; j < timeVal.size(); ++j)
-//        {
-//            std::string message = timeVal[j].asString();
-//            ofLogNotice("ofApp::setup") << message;
-//        }
-//    }
-//}
-
 void ofApp::printJSONForAttribute(string attributeName, int value)
 {
     string output = "";
@@ -413,7 +518,6 @@ float ofApp::getValue(string param, string sceneName, float currentTime){
        for (Json::ArrayIndex j = 0; j < timeVal.size(); ++j)
        {
            std::string message = timeVal[j].asString();
-           ofLogNotice("ofApp::setup") << message;
        }
    }
     return 0;

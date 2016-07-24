@@ -23,8 +23,7 @@ int main( ){
     ofGLFWWindowSettings settings;
     settings.width = 1440;
     settings.height = 1000;
-    // settings.setPosition(ofVec2f(2720,-500));
-    settings.setPosition(ofVec2f(0,-500));
+    settings.setPosition(ofVec2f(1440,-100));
 
     auto mainWindow = ofCreateWindow(settings);
     //shared_ptr<ofAppBaseWindow> mainWindow = ofCreateWindow(settings);
