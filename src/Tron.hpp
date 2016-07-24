@@ -4,11 +4,11 @@
 
 class Tron : public ofBaseApp{
 public:
-    Tron(int ms, int lt, float centerOffset);
+    Tron(float ms, int lt, float x, float y);
     
     void update();
-    void draw(float lowerT, int windWidth, int windHeight);
-    void drawThickLine(ofVec2f rate1, ofVec2f rate2, float lowerT);
+    void draw(float lowerT, int windWidth, int windHeight, int perspPower);
+    void drawThickLine(ofVec2f rate1, ofVec2f rate2, float lowerT, int perspPower);
     bool shouldDelete();
     float fRand(float fMin, float fMax);
 

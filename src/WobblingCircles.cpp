@@ -18,7 +18,7 @@ WobblingCircles::WobblingCircles()
 }
 
 //--------------------------------------------------------------
-void WobblingCircles::update(int wandCircCount, int wandCircFreq, int wandCircMaxSpeed, int wandCircRadius, int wandCircMaxAccel, int wandCircAccelFreq, int wandCircGravityStrength, int wandCircGravityAttractiveScale, int wandCircGravityAttractivePower, ofVec2f* gravCenter){
+void WobblingCircles::update(int wandCircCount, int wandCircFreq, int wandCircMaxSpeed, int wandCircRadius, int wandCircMaxAccel, float wandCircAccelFreq, int wandCircGravityStrength, int wandCircGravityAttractiveScale, int wandCircGravityAttractivePower, ofVec2f* gravCenter){
     // WANDERING CIRCLES
     for (std::vector<WobblingCircle*>::iterator it = wanderingCircles.begin() ; it != wanderingCircles.end(); ++it)
     {
@@ -36,7 +36,7 @@ void WobblingCircles::update(int wandCircCount, int wandCircFreq, int wandCircMa
     if(wanderingCircles.size() < wandCircCount){
       for(int i = 0; i < 100; i ++)
       {
-        if (rand() % (100) > wandCircFreq)
+        if (rand() % (100) < wandCircFreq)
         {
               wanderingCircles.push_back(new WobblingCircle(wandCircRadius,wandCircMaxSpeed, wandCircMaxAccel, wandCircAccelFreq));
         }
@@ -61,11 +61,11 @@ void WobblingCircles::update(int wandCircCount, int wandCircFreq, int wandCircMa
 }
 
 //--------------------------------------------------------------
-void WobblingCircles::draw(float f){
+void WobblingCircles::draw(float f, float opacity){
     
     // FADE
     fbo.begin();
-    float fade = f;
+    float fade = 1.0-f;
     ofSetColor(0,0,0,255*(pow(fade,3)));
     ofDrawRectangle(0,0,fbo.getWidth(), fbo.getHeight());
 
@@ -75,6 +75,11 @@ void WobblingCircles::draw(float f){
     {
         (*it)->draw();
     }
+
+    // OPACITY
+    ofSetColor(0,0,0,255*(1.0-opacity));
+    ofDrawRectangle(0,0,fbo.getWidth(), fbo.getHeight());
+
     fbo.end();
 
     ofEnableBlendMode(OF_BLENDMODE_ADD);

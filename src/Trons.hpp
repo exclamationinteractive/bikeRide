@@ -11,8 +11,8 @@ public:
 
     Trons();
 
-    void update(int tronCount, int lineThickness, float tronMaxSpeed, float rotation);
-    void draw(float f, float lowerT);
+    void update(float tronCount, int lineThickness, float tronMaxSpeed, ofVec2f* center);
+    void draw(float f, float lowerT, int persPower, float opacity);
     void windowResized(int w, int h);
     std::vector<Tron*> trons;
 };

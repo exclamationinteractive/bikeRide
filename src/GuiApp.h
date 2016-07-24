@@ -13,34 +13,52 @@ public:
 
     ofxPanel gui;
 
+    ofxToggle manualMode;
+    
+    ofxToggle bikeControlled;
+
     ofxFloatSlider rotation;
     ofxFloatSlider speed;
 
+    ofxIntSlider centerX;
+    ofxIntSlider centerY;
+    ofxIntSlider bikeCenteringCenter;
+    ofxIntSlider bikeCenteringScale;
+
+    ofxIntSlider perspective;
+
+
+    ofxFloatSlider wandCircAlpha;
     ofxFloatSlider wandCircFade;
-    ofxIntSlider wandCircMaxSpeed;
-    ofxIntSlider wandCircMaxAccel;
-    ofxIntSlider wandCircAccelFreq;
+
+    ofxFloatSlider wandCircSpeedScale;
+    ofxFloatSlider wandCircMaxAccel;
+    ofxFloatSlider wandCircAccelFreq;
+
     ofxIntSlider wandCircRadius;
     ofxIntSlider wandCircCount;
     ofxIntSlider wandCircAddFreq;
     ofxIntSlider wandCircGravityStrength;
-    ofxIntSlider wandCircGravityAttractiveScale;
-    ofxIntSlider wandCircGravityAttractivePower;
+    ofxIntSlider wandCircGravityScale;
+    ofxIntSlider wandCircGravityPower;
     ofxIntSlider wandRotationDistance;
 
-    ofxFloatSlider fade;
-    ofxIntSlider tronMaxSpeed;
-    ofxIntSlider tronCount;
+    ofxFloatSlider tronAlpha;
+    ofxFloatSlider tronFade;
+    ofxFloatSlider tronSpeedScale;
+    ofxFloatSlider tronCount;
     ofxIntSlider tronLineThickness;
     ofxFloatSlider tronLowerT;
-    ofxFloatSlider tronRotationDistance;
-    
-    ofxToggle gridOn;
-    ofxFloatSlider gridFade;
-    ofxIntSlider gridSpeed;
-    ofxIntSlider gridIterations;
-    ofxFloatSlider gridLowerT;
-    ofxFloatSlider gridRotationDistance;
+    ofxFloatSlider tronRotationDistanceX;
+    ofxFloatSlider tronRotationDistanceY;
 
+    ofxFloatSlider gridAlpha;
+    ofxFloatSlider gridFade;
+    ofxFloatSlider gridSpeedScale;
+    ofxIntSlider gridIterationsX;
+    ofxIntSlider gridIterationsY;
+    ofxFloatSlider gridLowerT;
+    ofxFloatSlider gridRotationDistanceX;
+    ofxFloatSlider gridRotationDistanceY;
 
 };

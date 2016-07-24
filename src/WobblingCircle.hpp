@@ -5,14 +5,14 @@
 
 class WobblingCircle : public ofBaseApp{
 public:
-    WobblingCircle(int r, int ms, int ma, int af);
+    WobblingCircle(int r, float ms, float ma, float af);
 
     void update();
     void draw();
     // bool shouldDelete();
     bool shouldDelete(int windowWidth, int windowHeight);
     void setGravityStrength(int strength, int attractiveScale, int power);
-    void setMaxSpeed(float ms, float ma, int acf);
+    void setMaxSpeed(float ms, float ma, float acf);
     void setGravityCenter(ofVec2f* c);
     float fRand(float fMin, float fMax);
  

@@ -7,9 +7,9 @@ public:
     Grid(int ms, int lt);
     
     void update();
-    void draw(float f, float lowerT);
+    void draw(float f, float lowerT, int perspPow, float opacity);
     void setSpeed(float s);
-    void setCenter(ofVec2f* c, int inc);
+    void setCenter(ofVec2f* c, int incX, int incY);
     float fRand(float fMin, float fMax);
     void windowResized(int w, int h);
 
@@ -18,7 +18,9 @@ public:
 
     ofVec2f center;
     
-    float increment;
+    float incrementX;
+    float incrementY;
+
     float speed;
     float t;
 

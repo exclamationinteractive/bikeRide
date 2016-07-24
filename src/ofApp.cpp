@@ -1,5 +1,6 @@
 #include "ofApp.h"
 
+
 ofApp::ofApp(std::shared_ptr<GuiApp> g){
     this->gui = g;
 }
@@ -8,77 +9,171 @@ ofApp::ofApp(std::shared_ptr<GuiApp> g){
 void ofApp::setup(){
 
     ofBackground(0,0,0);
-    ofSetFrameRate(120);
+    ofSetFrameRate(60);
 
     loadFile();
+    
+    // GRID
+    grid = new Grid(1,5);
 
-    // FADE
-    fbo.allocate(ofGetWindowWidth(), ofGetWindowHeight(), GL_RGBA32F_ARB); // with alpha, 8 bits red, 8 bits green, 8 bits blue, 8 bits alpha, from 0 to 255 in 256 steps
-
-    fbo.begin();
-    ofClear(255,255,255, 0);
-    fbo.end();
 
     // WANDERING CIRCLES
     for (int i=1; i<=1; i++)
     {
         wanderingCircles.push_back(new WobblingCircles());
     }
-
+    
     // TRON
     for (int i=1; i<=1; i++)
     {
         trons.push_back(new Trons());
     }
 
-    // GRID
-    grid = new Grid(1,5);
+    // Scene
+    currentScene = "scene00";
 
     // SERIAL
     serial.listDevices();
     vector <ofSerialDeviceInfo> deviceList = serial.getDeviceList();
     int baud = 115200;
     //    int baud = 9600;
-    serial.setup(1, baud); //open the first device
+    //serial.setup(1, baud); //open the first device
     //serial.setup("COM4", baud); // windows example
     //serial.setup("/dev/tty.usbserial-A4001JEC", baud); // mac osx example
-    //	serial.setup("/dev/ttyUSB0", baud); //linux example
+    serial.setup(0, baud); //linux example
 
     sampler = PdSampler();
+    receiver.setup(IN_PORT);
+
 }
 
 //--------------------------------------------------------------
 void ofApp::update(){
-    sampler.setBikeSpeed(ofRandom(0,1));
+
+    // SOUND OSC
+    sampler.setBikeSpeed(gui->speed);
+    receiveOSC();
+
+    if (!gui->manualMode)
+    {
+        // ofxJSONElement a = scenes.get(currentScene,0);
+        // sceneTime += ofGetLastFrameTime();
+
+        // // GLOBAL
+        // // gui->perspective = getValue(a.get("perspective", 0), sceneTime);
+ 
+        // // GRID
+        // gui->gridAlpha = getValue("grid-alpha", currentScene, sceneTime);
+        // gui->gridFade = getValue("grid-fade", currentScene,sceneTime);
+        // // gui->gridIterationsX = getValue("grid-iterationsX", currentScene, sceneTime);
+        // // gui->gridIterationsY = getValue("grid-iterationsX", currentScene, sceneTime);
+        // gui->gridSpeedScale = getValue("grid-speed-scale", currentScene, sceneTime);
+        // gui->gridLowerT = getValue("grid-lower-t", currentScene, sceneTime);
+        // gui->gridRotationDistanceX = getValue("grid-rot-dist-x", currentScene, sceneTime);
+        // gui->gridRotationDistanceY = getValue("grid-rot-dist-y", currentScene, sceneTime);
+
+        // // WANDERING CIRCLES
+        // gui->wandCircAlpha = getValue("wob-alpha", currentScene, sceneTime);
+        // gui->wandCircFade = getValue("wob-fade", currentScene,sceneTime);
+        // gui->wandCircCount = getValue("wob-count", currentScene,sceneTime);
+        // gui->wandCircAddFreq = getValue("wob-add-freq", currentScene,sceneTime);
+        // gui->wandCircRadius = getValue("wob-radius", currentScene,sceneTime);
+        // gui->wandCircMaxSpeed = getValue("wob-max-speed", currentScene,sceneTime);
+        // gui->wandCircMaxAccel = getValue("wob-max-accel", currentScene, sceneTime);
+        // gui->wandCircAccelFreq = getValue("wob-accel-freq", currentScene, sceneTime);
+        // gui->wandCircGravityStrength = getValue("wob-grav-strength", currentScene, sceneTime);
+        // gui->wandCircGravityScale = getValue("wob-grav-scale", currentScene, sceneTime);
+        // gui->wandCircGravityPower = getValue("wob-grav-power", currentScene, sceneTime);
+
+        // // TRON
+        // gui->tronAlpha = getValue("tron-alpha", currentScene, sceneTime);
+        // gui->tronFade = getValue("tron-fade", currentScene, sceneTime);
+        // gui->tronCount = getValue("tron-count", currentScene, sceneTime);
+        // gui->tronLineThickness = getValue("tron-width", currentScene, sceneTime);
+        // gui->tronSpeedScale = getValue("tron-speed-scale", currentScene, sceneTime);
+        // gui->tronLowerT = getValue("tron-lower-t", currentScene, sceneTime);
+        // gui->tronRotationDistanceX = getValue("tron-rot-dist-x", currentScene, sceneTime);
+        // gui->tronRotationDistanceY = getValue("tron-rot-dist-y", currentScene, sceneTime);
+    }
+
     // SERIAL
+    serial.writeByte('a');
+
     int nTimesRead  = 0;  // a temp variable to keep count per read
     int nRead  = 0;  // a temp variable to keep count per read
-    unsigned char bytesReturned[3];
-    while( (nRead = serial.readBytes( bytesReturned, 3)) > 0){
-        nTimesRead++;
-    };
+    unsigned char bytesReturned[15];
 
-    speed = nTimesRead;
+    memset(bytesReturned, 0, 15);
+
+//serial.readBytes(
+    if (serial.available() > 0)
+    {
+        while( (nRead = serial.readBytes( bytesReturned, 15)) > 0){
+
+            int a = 0;
+            int b = 0;
+            a = bytesReturned[0];
+            b = bytesReturned[1];
+
+            cout << "data:";
+            cout << a;
+            cout << ":";
+            cout << b;
+            cout << ":\n";
+     
+            speed = a;
+            float bikeScale = gui->bikeCenteringScale;
+            float new_rotation = (b - gui->bikeCenteringCenter)/bikeScale;
+            rotation = rotation + (new_rotation - rotation )/2.0;
+            if (gui->bikeControlled)
+            {
+                gui->rotation = rotation;
+                gui->speed = speed;
+            }
+        };
+    }
+
+    if (!gui->bikeControlled)
+    {
+        speed = gui->speed;
+        rotation = gui->rotation;
+    }
 
     // WANDERING CIRCLES
     for (std::vector<WobblingCircles*>::iterator it = wanderingCircles.begin() ; it != wanderingCircles.end(); ++it)
     {
-        (*it)->update(gui->wandCircCount, gui->wandCircAddFreq, gui->wandCircMaxSpeed, gui->wandCircRadius, gui->wandCircMaxAccel, gui->wandCircAccelFreq, gui->wandCircGravityStrength, gui->wandCircGravityAttractiveScale, gui->wandCircGravityAttractivePower, new ofVec2f(ofGetWindowWidth()/2.0+gui->rotation*gui->wandRotationDistance, ofGetMouseY()));
+        (*it)->update(gui->wandCircCount, gui->wandCircAddFreq, speed*gui->wandCircSpeedScale, gui->wandCircRadius, gui->wandCircMaxAccel, 1-gui->wandCircAccelFreq, gui->wandCircGravityStrength, gui->wandCircGravityScale, gui->wandCircGravityPower, new ofVec2f(ofGetWindowWidth()/2.0+gui->rotation*gui->wandRotationDistance, ofGetMouseY()));
     }
     // TRON
     for (std::vector<Trons*>::iterator it = trons.begin() ; it != trons.end(); ++it)
     {
-        (*it)->update(gui->tronCount, gui->tronLineThickness, gui->tronMaxSpeed, gui->rotation*gui->tronRotationDistance);
+        (*it)->update(gui->tronCount, gui->tronLineThickness, speed * gui->tronSpeedScale, new ofVec2f(gui->centerX+rotation*gui->tronRotationDistanceX, gui->centerY - cos(rotation)*gui->tronRotationDistanceY));
     }
 
     // GRID
-    grid->setSpeed(gui->gridSpeed);
-//    grid->setSpeed(speed);
-//    grid->setCenter(new ofVec2f(ofGetMouseX()+gui->rotation*gui->gridRotationDistance, ofGetMouseY()), gui->gridIterations);
-    grid->setCenter(new ofVec2f(ofGetWindowWidth()/2.0+gui->rotation*gui->gridRotationDistance, ofGetWindowHeight()/2.0 - cos(gui->rotation)*gui->gridRotationDistance/3.0), gui->gridIterations);
+    grid->setSpeed(speed*gui->gridSpeedScale);
+    grid->setCenter(new ofVec2f(gui->centerX+rotation*gui->gridRotationDistanceX, gui->centerY - cos(rotation)*gui->gridRotationDistanceY), gui->gridIterationsX, gui->gridIterationsY);
     grid->update();
 
 }
+
+// OSC parsing
+void ofApp::receiveOSC(){
+  // check for waiting messages
+	while(receiver.hasWaitingMessages()){
+		// get the next message
+		ofxOscMessage m;
+		receiver.getNextMessage(m);
+    float val = 0;
+		// print incomming addr
+    cout << m.getAddress() << endl;
+		if(m.getAddress() == "/grid/whatever"){
+			 val = m.getArgAsFloat(0);
+		}
+  }
+}
+
+
 
 void ofApp::drawLines(int lineCount)
 {
@@ -87,20 +182,20 @@ void ofApp::drawLines(int lineCount)
         for( int a = 0; a < lineCount; a = a + 1 )
         {
             ofPath line;
-
+    
             line.setFilled(false);
             line.setStrokeWidth(15);
             line.setCurveResolution(200);
-
-
+    
+    
             int brightness = ofRandom( 0, 255 );
             line.setStrokeColor( ofColor(brightness, brightness, brightness));
-
+    
             line.curveTo( ofPoint(rand() % (ofGetWindowWidth() + 2*buffer) - buffer, rand() % (ofGetWindowHeight() + 2*buffer)-buffer));
             line.curveTo( ofPoint(rand() % (ofGetWindowWidth() + 2*buffer) - buffer, rand() % (ofGetWindowHeight() + 2*buffer)-buffer));
             line.curveTo( ofPoint(rand() % (ofGetWindowWidth() + 2*buffer) - buffer, rand() % (ofGetWindowHeight() + 2*buffer)-buffer));
             line.curveTo( ofPoint(rand() % (ofGetWindowWidth() + 2*buffer) - buffer, rand() % (ofGetWindowHeight() + 2*buffer)-buffer));
-
+            
             line.draw();
         }
 
@@ -127,25 +222,25 @@ void ofApp::draw(){
 	for (int j = 0; j < 10000; j++){
 		//	ofDrawCircle(ofRandom(0,850), ofRandom(0,600),20);
 
-	}
+	}    
 
     // DRAW TRONS
     ofSetColor(255,255,255);
     for (std::vector<Trons*>::iterator it = trons.begin() ; it != trons.end(); ++it)
     {
-        (*it)->draw(gui->fade, gui->tronLowerT);
+        (*it)->draw(gui->tronFade, gui->tronLowerT, gui->perspective, gui->tronAlpha);
     }
 
     // DRAW WANDERING CIRCLES
     for (std::vector<WobblingCircles*>::iterator it = wanderingCircles.begin() ; it != wanderingCircles.end(); ++it)
     {
-        (*it)->draw(gui->wandCircFade);
+        (*it)->draw(gui->wandCircFade, gui->wandCircAlpha);
     }
-
+    
     // GRID
-    if (gui->gridOn)
+    if (gui->gridAlpha > 0)
     {
-        grid->draw(gui->gridFade, gui->gridLowerT);
+        grid->draw(gui->gridFade, gui->gridLowerT, gui->perspective, gui->gridAlpha);
     }
 
 
@@ -157,18 +252,35 @@ void ofApp::draw(){
 
 //--------------------------------------------------------------
 void ofApp::keyPressed(int key){
-  sampler.setSong(1, 2);
-  sampler.cueTrack(1, 0.5);
-  sampler.setGain(1, 0.5, 1000);
-
+  // sampler.setSong(1, 2);
+  // sampler.cueTrack(1, 0.5);
+  // sampler.setGain(1, 0.5, 1000);
 
     switch(key)
     {
+        case 'q':
+            gui->centerY = gui->centerY - 1;
+            break;
+        case 'a':
+            gui->centerY = gui->centerY + 1;
+            break;
+        case 'w':
+            gui->centerY = gui->centerY - 10;
+            break;
+        case 's':
+            gui->centerY = gui->centerY + 10;
+            break;
+            
+        case'p':
+            printJSON();
+        break;
         case 'f':
             ofToggleFullscreen();
         break;
+        case 'm':
+            gui->manualMode = !gui->manualMode;
+        break;
     }
-
 }
 
 //--------------------------------------------------------------
@@ -178,7 +290,7 @@ void ofApp::keyReleased(int key){
 
 //--------------------------------------------------------------
 void ofApp::mouseMoved(int x, int y){
-
+    
 }
 
 //--------------------------------------------------------------
@@ -198,10 +310,6 @@ void ofApp::mouseReleased(int x, int y, int button){
 
 //--------------------------------------------------------------
 void ofApp::windowResized(int w, int h){
-    fbo.allocate(ofGetWindowWidth(), ofGetWindowHeight(), GL_RGBA32F_ARB); // with alpha, 8 bits red, 8 bits green, 8 bits blue, 8 bits alpha, from 0 to 255 in 256 steps
-    fbo.begin();
-    ofClear(255,255,255, 0);
-    fbo.end();
 
     // WANDERING CIRCLES
     for (std::vector<WobblingCircles*>::iterator it = wanderingCircles.begin() ; it != wanderingCircles.end(); ++it)
@@ -224,15 +332,143 @@ void ofApp::gotMessage(ofMessage msg){
 }
 
 //--------------------------------------------------------------
-void ofApp::dragEvent(ofDragInfo dragInfo){
+void ofApp::dragEvent(ofDragInfo dragInfo){ 
 
 }
+
+
+//void ofApp::getValues(ofxJSONElement timeVals){
+//    for (Json::ArrayIndex i = 0; i < timeVals.size(); ++i)
+//    {
+//        ofxJSONElement timeVal = timeVals[i];
+//        for (Json::ArrayIndex j = 0; j < timeVal.size(); ++j)
+//        {
+//            std::string message = timeVal[j].asString();
+//            ofLogNotice("ofApp::setup") << message;
+//        }
+//    }
+//}
+
+void ofApp::printJSONForAttribute(string attributeName, int value)
+{
+    string output = "";
+    output += "\""+attributeName+"\":[[0,";
+    output += to_string(value);
+    output += "]],\n";
+    cout << output;
+}
+
+
+void ofApp::printJSON()
+{
+
+    cout <<"----\n";
+    cout << "PRINT JSON\n";
+    time_t now = time(0);
+    cout << ctime(&now);
+    cout <<"----\n";
+    printJSONForAttribute("wandCircCount",gui->wandCircCount);
+    printJSONForAttribute("wandCircFade",gui->wandCircFade);
+}
+
+
+float ofApp::getValue(string param, string sceneName, float currentTime){
+
+    ofxJSONElement scene = scenes.get(sceneName,0);
+    ofxJSONElement timeVals = scene.get(param,0);
+    
+    if (timeVals == 0)
+    {
+        return getValue(param, "default", currentTime);
+    }
+    
+    // // Check if last time
+    int lastTime = timeVals[timeVals.size()-1][0].asInt();
+    if (currentTime > lastTime)
+    {
+        return timeVals[timeVals.size()-1][1].asFloat();
+    }
+        
+    // // If not last time, get the interpolated value    
+    if (timeVals.size() > 1)
+    {
+
+        for (Json::ArrayIndex i = 1; i < timeVals.size(); ++i)
+        {
+            int time = timeVals[i][0].asInt();
+            if (time >= currentTime)
+            {
+                float value = timeVals[i][1].asFloat();
+                float prevValue = timeVals[i-1][1].asFloat();
+                int prevTime = timeVals[i-1][1].asInt();
+                float timeIter = (currentTime-prevTime)/(float)(time-prevTime);
+                return ofLerp(prevValue, value, timeIter );
+            }
+        }
+    }
+        
+   for (Json::ArrayIndex i = 0; i < timeVals.size(); ++i)
+   {
+       ofxJSONElement timeVal = timeVals[i];
+       for (Json::ArrayIndex j = 0; j < timeVal.size(); ++j)
+       {
+           std::string message = timeVal[j].asString();
+           ofLogNotice("ofApp::setup") << message;
+       }
+   }
+    return 0;
+}
+
 
 
 void ofApp::loadFile()
 {
 
+    std::string file = "scenes.json";
+    ofxJSONElement result;
+    
+    // Now parse the JSON
+    bool parsingSuccessful = result.open(file);
+    
+    
+    if (parsingSuccessful)
+    {
+//        result.
+//        ofxJSONElement a = result.get("scene0",0);
+        scenes = result;
 
-
-
+//        getValue(a.get("wob-speed", 0),10);
+        
+//        b.get
+//        Json::ArrayIndex i = 0;
+//        int c = b.get(i,1);
+//        int ddd = 2;
+//        ofLogNotice("ofApp::setup") << result.getRawString();
+//        
+//        // now write pretty print
+//        if (!result.save("example_output_pretty.json", true))
+//        {
+//            ofLogNotice("ofApp::setup") << "example_output_pretty.json written unsuccessfully.";
+//        }
+//        else
+//        {
+//            ofLogNotice("ofApp::setup") << "example_output_pretty.json written successfully.";
+//        }
+//        
+//        // now write without pretty print
+//        if (!result.save("example_output_fast.json", false))
+//        {
+//            ofLogNotice("ofApp::setup") << "example_output_pretty.json written unsuccessfully.";
+//        }
+//        else
+//        {
+//            ofLogNotice("ofApp::setup") << "example_output_pretty.json written successfully.";
+//        }
+        
+    }
+    else
+    {
+        ofLogError("ofApp::setup")  << "Failed to parse JSON" << endl;
+    }
 }
+

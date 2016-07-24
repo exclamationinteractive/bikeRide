@@ -17,24 +17,25 @@ Grid::Grid(int ms, int inc)
     ofClear(255,255,255, 0);
     fbo.end();
 
-    
     int buffer = 100;
     
     speed = ms/1000.0;
     t = 0;
 
-    increment = inc;
+    incrementX = 2;
+    incrementY = 5;
 
     center.set(ofGetMouseX(), ofGetMouseY());
 //    center.set(ofGetWindowWidth()/2.0, ofGetWindowHeight()/2.0);
 
-    float xRes = ofGetWindowWidth() / increment;
-    float yRes = ofGetWindowHeight() / increment;
-
-    for (int i = 0; i <= increment + 1; i ++)
+    
+    float xRes = ofGetWindowWidth() / incrementX;
+    float yRes = ofGetWindowHeight() / incrementX;
+    
+    for (int i = 0; i <= incrementX + 1; i ++)
     {
         std::array<ofVec2f*, 4> l = {new ofVec2f(xRes * i - center.x, 0 - center.y), new ofVec2f(xRes * i - center.x, ofGetWindowHeight() - center.y), new ofVec2f(0 - center.x, xRes * i - center.y), new ofVec2f(ofGetWindowWidth() - center.x, xRes * i - center.y)};
-        
+
         lines.push_back(l);
     }
 }
@@ -45,14 +46,14 @@ void Grid::update(){
 }
 
 //--------------------------------------------------------------
-void Grid::draw(float f, float lowerT){
+void Grid::draw(float f, float lowerT, int perspPow, float opacity){
     // FADE
     fbo.begin();
-    float fade = f;
+    float fade = 1.0-f;
     ofSetColor(0,0,0,255*(pow(fade,3)));
     ofDrawRectangle(0,0,fbo.getWidth(), fbo.getHeight());
     
-    ofSetColor(255,255,255,255);
+    ofSetColor(255,255,255,255*opacity);
 
     float x = 0;
     float y = 0;
@@ -62,39 +63,41 @@ void Grid::draw(float f, float lowerT){
     float yRate = 1;
 
     // DRAW CENTER OF GRID
-    for(int ii = 0; ii < increment; ii ++)
+    for(int ii = 0; ii < incrementX; ii ++)
     {
         for(int j = 0; j < 4; j ++)
         {
             ofVec2f p1;
-            p1.set(center + (lowerT) * *lines.at(ii).at(j));
+            p1.set(center + pow(lowerT,perspPow) * *lines.at(ii).at(j));
             ofVec2f p2;
-            p2.set(center + (lowerT) * *lines.at(ii+1).at(j));
+            p2.set(center + pow(lowerT,perspPow) * *lines.at(ii+1).at(j));
             ofVec2f p3;
-            p3.set(center + (lowerT + 1.0/increment) * *lines.at(ii).at(j));
+            p3.set(center + (pow(lowerT + 1.0/incrementY,perspPow)) * *lines.at(ii).at(j));
             ofVec2f p4;
-            p4.set(center + (lowerT + 1.0/increment) * *lines.at(ii+1).at(j));
-            
+            p4.set(center + (pow(lowerT + 1.0/incrementY,perspPow)) * *lines.at(ii+1).at(j));
+
             ofDrawLine(p1,p2);
             ofDrawLine(p2,p4);
-        }    }
+            ofDrawLine(p1,p3);
+        }
+    }
 
 
     // DRAW GRID
-    for(int i = 0; i < increment-1; i ++)
+    for(int i = 0; i < incrementY-1; i ++)
     {
-        for(int ii = 0; ii < increment; ii ++)
+        for(int ii = 0; ii < incrementX; ii ++)
         {
             for(int j = 0; j < 4; j ++)
             {
                 ofVec2f p1;
-                p1.set(center + (lowerT + ofWrap(t + 1.0/increment * i, 0, 1)) * *lines.at(ii).at(j));
+                p1.set(center + (pow(lowerT + ofWrap(t + 1.0/incrementY * i, 0, 1),perspPow)) * *lines.at(ii).at(j));
                 ofVec2f p2;
-                p2.set(center + (lowerT + ofWrap(t + 1.0/increment * i, 0, 1)) * *lines.at(ii+1).at(j));
+                p2.set(center + (pow(lowerT + ofWrap(t + 1.0/incrementY * i, 0, 1),perspPow)) * *lines.at(ii+1).at(j));
                 ofVec2f p3;
-                p3.set(center + (lowerT + ofWrap(t + 1.0/increment * i + 1.0/increment, 0, 1)) * *lines.at(ii).at(j));
+                p3.set(center + (pow(lowerT + ofWrap(t + 1.0/incrementY * i + 1.0/incrementY, 0, 1),perspPow)) * *lines.at(ii).at(j));
                 ofVec2f p4;
-                p4.set(center + (lowerT + ofWrap(t + 1.0/increment * i + 1.0/increment, 0, 1)) * *lines.at(ii+1).at(j));
+                p4.set(center + (pow(lowerT + ofWrap(t + 1.0/incrementY * i + 1.0/incrementY, 0, 1),perspPow)) * *lines.at(ii+1).at(j));
 
                 ofDrawLine(p1,p2);
                 ofDrawLine(p2,p4);
@@ -104,10 +107,14 @@ void Grid::draw(float f, float lowerT){
         }
     }
     
+    // ofSetColor(0,0,0,255*(1.0-opacity));
+    // ofDrawRectangle(0,0,fbo.getWidth(), fbo.getHeight());
+
     fbo.end();
     ofEnableBlendMode(OF_BLENDMODE_ADD);
     fbo.draw(0,0);
     ofEnableBlendMode(OF_BLENDMODE_ALPHA);
+
 
 }
 
@@ -116,18 +123,19 @@ void Grid::setSpeed(float s)
     speed = s/1000.0;
 }
 
-void Grid::setCenter(ofVec2f* c, int inc)
+void Grid::setCenter(ofVec2f* c, int incX, int incY)
 {
-    increment = inc;
+    incrementX = incX;
+    incrementY = incY;
 
     center = *c;
     
     lines.clear();
 
-    float xRes = ofGetWindowWidth() / increment;
-    float yRes = ofGetWindowHeight() / increment;
+    float xRes = ofGetWindowWidth() / incrementX;
+    float yRes = ofGetWindowHeight() / incrementX;
 
-    for (int i = 0; i <= increment + 1; i ++)
+    for (int i = 0; i <= incrementX + 1; i ++)
     {
         std::array<ofVec2f*, 4> l = {new ofVec2f(xRes * i - center.x, 0 - center.y), new ofVec2f(xRes * i - center.x, ofGetWindowHeight() - center.y), new ofVec2f(0 - center.x, yRes * i - center.y), new ofVec2f(ofGetWindowWidth() - center.x, yRes * i - center.y)};
 

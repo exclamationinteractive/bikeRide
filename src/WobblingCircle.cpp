@@ -8,7 +8,7 @@
 
 #include "WobblingCircle.hpp"
 
-WobblingCircle::WobblingCircle(int r, int ms, int ma, int accelFreq)
+WobblingCircle::WobblingCircle(int r, float ms, float ma, float accelFreq)
 {
     int buffer = 100;
 
@@ -24,19 +24,13 @@ WobblingCircle::WobblingCircle(int r, int ms, int ma, int accelFreq)
     vel.set(fRand(-maxSpeed, maxSpeed), fRand(-maxSpeed, maxSpeed));
     accel.set(fRand(-maxAccel, maxAccel), fRand(-maxAccel, maxAccel));
 
-//    for (int i=1; i<=50; i++)f
-//    {
-
-//    sub.push_back ({"Math", 70, 0});
     GravityCenter gravCent;
-//    gravCent.center = new ofVec2f(400.0,400.0);
     gravCent.center = *new ofVec2f(ofGetMouseX(), ofGetMouseY());
     gravCent.strength = 1000;
     gravCent.power = 0;
 
     gravCent.attractiveScale = 1;
 
-    //    gravityCenters.push_back({, 10, -1});
     gravityCenters.push_back(gravCent);
 
 }
@@ -49,20 +43,9 @@ void WobblingCircle::update(){
     
     for (std::vector<GravityCenter>::iterator it = gravityCenters.begin() ; it != gravityCenters.end(); ++it)
     {
-//        it->center = *new ofVec2f(ofGetMouseX(), ofGetMouseY());
         float gravDist = it->center.distance(pos);
 
-//        if (gravDist > 200){
             vel = vel + it->attractiveScale * ((pos-it->center).normalize() * it->strength / pow(gravDist,it->power)) * ofGetLastFrameTime() * 100;
-//        }
-//        if (gravDist < 300)
-//        {
-//            vel = vel + 0.01*((pos-it->center).normalize() * it->strength / (gravDist));
-//        }
-//        else{
-//            vel = vel - 2*((pos-it->center).normalize() * it->strength / (gravDist));
-//        }
-//        vel = vel + 2*((pos-grav2D).normalize() * ((*it)->z / (gravDist * gravDist)));
     }
     
     if (vel.length() > maxSpeed)
@@ -75,15 +58,14 @@ void WobblingCircle::update(){
         vel = - vel.normalize()*maxSpeed;
     }
     
-
-    if (rand() % (100) > accelChangeFreq)
+    if (ofRandom(1) < accelChangeFreq)
     {
         accel.set(fRand(-maxAccel, maxAccel), fRand(-maxAccel, maxAccel));
     }
 
 }
 
-void WobblingCircle::setMaxSpeed(float ms, float ma, int acf)
+void WobblingCircle::setMaxSpeed(float ms, float ma, float acf)
 {
     maxSpeed = ms/10.0;
     maxAccel = ma/10.0;
@@ -112,7 +94,6 @@ void WobblingCircle::setGravityCenter(ofVec2f* c)
 //--------------------------------------------------------------
 void WobblingCircle::draw(){
     ofDrawCircle(pos.x,pos.y,radius);
-//ofDrawLine(pos.x,pos.y,0,0);
 }
 
 bool WobblingCircle::shouldDelete(int windowWidth, int windowHeight)

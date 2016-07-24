@@ -5,8 +5,11 @@
 #include "WobblingCircles.hpp"
 #include "Trons.hpp"
 #include "Grid.hpp"
+#include "ofxJSON.h"
 #include "PdSampler.h"
-//#include "ofxJSON.h"
+#include <ctime>
+// for osc input
+#define IN_PORT 12345
 
 class ofApp : public ofBaseApp{
 	public:
@@ -15,7 +18,7 @@ class ofApp : public ofBaseApp{
     void setup();
 	void update();
 	void draw();
-
+	
 	void keyPressed(int key);
 	void keyReleased(int key);
 	void mouseMoved(int x, int y);
@@ -27,13 +30,24 @@ class ofApp : public ofBaseApp{
 	void gotMessage(ofMessage msg);
     void drawLines(int lineCount);
     void drawCircles(int circleCount);
+    void printJSON();
+    void printJSONForAttribute(string attributeName, int value);
     void loadFile();
+    // float getValue(ofxJSONElement timeVals, float currentTime);
+    float getValue(string param, string sceneName, float currentTime);
+		void receiveOSC();
+		ofxOscReceiver receiver;
 
     Grid* grid;
 
 //    GuiApp* gui;
     std::shared_ptr<GuiApp> gui;
-
+    
+    // SCENE FILE
+    ofxJSONElement scenes;
+    float sceneTime;
+    string currentScene;
+    
     // FADE
     int fadeAmnt;
     ofFbo fbo; // with alpha
@@ -41,11 +55,13 @@ class ofApp : public ofBaseApp{
     // SERIAL
     ofSerial	serial;
     float speed;
+    float rotation;
+    ofVec2f* center;
 
     std::vector<WobblingCircles*> wanderingCircles;
     std::vector<Trons*> trons;
 
-		// PD osc sampler thingy
-		PdSampler sampler;
+    // PD osc sampler thingy
+    PdSampler sampler;
 
 };

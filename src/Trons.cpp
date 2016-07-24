@@ -18,17 +18,19 @@ Trons::Trons()
 }
 
 //--------------------------------------------------------------
-void Trons::update(int tronCount, int lineThickness, float tronMaxSpeed, float rotation){
-    // WANDERING CIRCLES
+void Trons::update(float tronCount, int lineThickness, float tronMaxSpeed, ofVec2f* center){
     for (std::vector<Tron*>::iterator it = trons.begin() ; it != trons.end(); ++it)
     {
         (*it)->update();
     }
-    
-    if (rand() % (100) > tronCount)
+
+    if (ofRandom(1000) < (1-tronCount) * 100) 
     {
-//        trons.push_back(new Tron(1,1));
-        trons.push_back(new Tron(tronMaxSpeed, lineThickness, rotation));
+        cout << tronMaxSpeed;
+        if (tronMaxSpeed > 1)
+        {
+            trons.push_back(new Tron(tronMaxSpeed, lineThickness, (*center).x, (*center).y));
+        }
     }
     
     
@@ -49,11 +51,11 @@ void Trons::update(int tronCount, int lineThickness, float tronMaxSpeed, float r
 }
 
 //--------------------------------------------------------------
-void Trons::draw(float f, float lowerT){
+void Trons::draw(float f, float lowerT, int persPower, float opacity){
     
     // FADE
     fbo.begin();
-    float fade = f;
+    float fade = 1.0-f;
     ofSetColor(0,0,0,255*(pow(fade,3)));
     ofDrawRectangle(0,0,fbo.getWidth(), fbo.getHeight());
     
@@ -63,8 +65,13 @@ void Trons::draw(float f, float lowerT){
     int windHeight = ofGetWindowHeight();
     for (std::vector<Tron*>::reverse_iterator it = trons.rbegin() ; it != trons.rend(); ++it)
     {
-        (*it)->draw(lowerT, windWidth, windHeight);
+        (*it)->draw(lowerT, windWidth, windHeight, persPower);
     }
+
+    // OPACITY
+    ofSetColor(0,0,0,255*(1.0-opacity));
+    ofDrawRectangle(0,0,fbo.getWidth(), fbo.getHeight());
+
     fbo.end();
     
     ofEnableBlendMode(OF_BLENDMODE_ADD);
