@@ -1,0 +1,79 @@
+{
+	"default":
+	{
+		"perspective": [[0,3]],
+		"centerX":[[0,536]],
+		"centerY":[[0,700]],
+		"bikecalab-cent":[[0,62]],
+		"bikecalab-scale":[[0,68]],
+
+		// WANDERING CIRCLES
+		"wob-alpha": [[0,0]],
+		"wob-fade": [[0,0]],
+		"wob-count": [[0,100]],
+		"wob-add-freq": [[0,1]],
+		"wob-radius": [[0,2]],
+		"wob-max-speed": [[0,1]],
+		"wob-max-accel": [[0,1]],
+		"wob-accel-freq": [[0,0.9]],
+		"wob-grav-strength": [[0,1000]],
+		"wob-grav-scale": [[0,1]],
+		"wob-grav-power": [[0,1]],
+
+		// GRID
+		"grid-alpha": [[0,0]],
+		"grid-fade": [[0,0]],
+		"grid-iterationsX": [[0,2]],
+		"grid-iterationsY": [[0,8]],
+		"grid-speed-scale": [[0,0.62]],
+		"grid-lower-t": [[0,0.55]],
+		"grid-rot-dist-x": [[0,400]],
+		"grid-rot-dist-y": [[0,50]],
+
+		"tron-alpha": [[0,1]],
+		"tron-fade": [[0,0]],
+		"tron-count": [[0,0.99]],
+		"tron-width": [[0,5]],
+		"tron-speed-scale": [[0,0.3]],
+		"tron-lower-t": [[0,0.55]],
+		"tron-rot-dist-x": [[0,400]],
+		"tron-rot-dist-y": [[0,50]]
+	},
+	"scene00":
+	{
+		"scene-length": 10,
+		"nextScenes": ["scene00"],
+		// "perspective": [[0,3]],
+
+		// WANDERING CIRCLES
+		// "wob-alpha": [[0,0]],
+		// "wob-fade": [[0,0]],
+		// "wob-count": [[0,100]],
+		// "wob-add-freq": [[0,1]],
+		// "wob-radius": [[0,2]],
+		// "wob-max-speed": [[0,1]],
+		// "wob-max-accel": [[0,1]],
+		// "wob-accel-freq": [[0,0.9]],
+		// "wob-grav-strength": [[0,1000]],
+		// "wob-grav-scale": [[0,1]],
+		// "wob-grav-power": [[0,1]],
+
+		// GRID
+		"grid-alpha": [[0,1]],
+		"grid-fade": [[0,0.6]],
+		"grid-iterations": [[0,3]],
+		"grid-speed-scale": [[0,0.2]],
+		"grid-lower-t": [[0,0.55]],
+		"grid-rot-dist-x": [[0,400]],
+		"grid-rot-dist-y": [[0,100]]
+
+		// "tron-alpha": [[0,1]],
+		// "tron-fade": [[0,0]],
+		// "tron-count": [[0,0.99]],
+		// "tron-width": [[0,5]],
+		// "tron-speed-scale": [[0,0.3]],
+		// "tron-lower-t": [[0,0.55]],
+		// "tron-rot-dist-x": [[0,400]],
+		// "tron-rot-dist-y": [[0,100]]
+	}
+}
